@@ -6,7 +6,7 @@ import {
 } from "react-circular-progressbar";
 import { GetDetails } from "../../../api";
 import { GetWatchProvider } from "../../../api";
-import { GetVideo } from "../../../api";
+// import { GetVideo } from "../../../api";
 import "./moviedetailheader.css";
 import thumbnailImage from "../../../assets/thumbnail.svg";
 import list from "../../../assets/list.svg";
@@ -22,7 +22,7 @@ const MovieDetailHeader = ({ id, isMovie }) => {
   const [watchProvider, setWatchProvider] = useState({});
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [video, setVideo] = useState([]);
+  // const [video, setVideo] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -68,18 +68,18 @@ const MovieDetailHeader = ({ id, isMovie }) => {
     getData();
   }, [id]);
 
-  useEffect(() => {
-    const getVideoData = async () => {
-      await GetVideo(isMovie, id).then((response) => {
-        const trailer = response.data.results.find(
-          (video) => video.name === "Official Trailer"
-        );
-        setVideo(trailer);
-        console.log(trailer);
-      });
-    };
-    getVideoData();
-  }, [isMovie, id]);
+  // useEffect(() => {
+  //   const getVideoData = async () => {
+  //     await GetVideo(isMovie, id).then((response) => {
+  //       const trailer = response.data.results.find(
+  //         (video) => video.name === "Official Trailer"
+  //       );
+  //       setVideo(trailer);
+  //       console.log(trailer);
+  //     });
+  //   };
+  //   getVideoData();
+  // }, [isMovie, id]);
   const classHandler = () => {
     setIsActive((current) => !current);
   };
