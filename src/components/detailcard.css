@@ -32,6 +32,23 @@
     border-radius: 50%;
 }
 
+.images {
+    position: relative;
+}
+
+.blur-background {
+    position: absolute;
+    width: 150px;
+    height: 225px;
+    top: 0;
+    right: 0;
+    transition: linear .1s;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+}
+
 .progress_bar {
     height: 38px;
     width: 38px;
@@ -102,11 +119,55 @@
     color: rgba(0, 0, 0, 0.6);
 }
 
+.tooltip-icon {
+    width: 1em;
+    height: 1em;
+    max-width: 1em;
+    max-height: 1em;
+}
+
+.tooltip-data {
+    padding: 0;
+    background-color: white;
+    position: absolute;
+    border-radius: 3px;
+    top: 35px;
+    left: 61px;
+    width: 147px;
+    z-index: 1;
+    border: 1px solid rgba(33, 37, 41, 0.15) !important;
+    border-radius: 5px !important;
+}
+
+.show_tooltip {
+    visibility: visible;
+}
+
+.tooltip-data li {
+    padding: 12px 24px;
+}
+
+.main-tooltip-container {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+}
+
+.main-tooltip-container p {
+    margin: 0;
+    margin-left: 5px;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.6);
+
+}
+
 @keyframes fade-in {
     0% {
-      opacity: 0;
+        opacity: 0;
     }
+
     100% {
-      opacity: 1;
+        opacity: 1;
     }
-  }
+}

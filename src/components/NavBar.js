@@ -1,7 +1,7 @@
 import React from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
-import solid from "../assets/bars-solid.svg";
+import solid from "../assets/add-on.svg";
 
 const NavBar = () => {
   const showClassToggle = () => {

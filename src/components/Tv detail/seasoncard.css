@@ -1,0 +1,54 @@
+.current-season h3 {
+    font-weight: 600;
+    font-size: 1.4em;
+    margin-bottom: 20px;
+}
+
+.current-season-card {
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+    background-color: #fff;
+    overflow: hidden;
+    border-radius: 8px !important;
+}
+
+.current-image-container {
+    width: 130px;
+    height: 195px;
+    background: #dbdbdb;
+    display: flex;
+}
+
+.season-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.current-season-content {
+    padding: 1.5rem 1rem 0 1.25rem;
+}
+
+.current-season-content h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0 !important;
+}
+
+.current-season-content h3 {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.season-overview {
+    margin-top: 28px;
+}
+
+.new_button {
+    margin: 1rem 0 0 0;
+}
+.new_button a {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: black;
+}

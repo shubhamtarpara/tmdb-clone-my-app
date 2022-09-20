@@ -6,11 +6,11 @@ import heartRecommendation from "../../../../assets/heartRecommendation.svg";
 import assest from "../../../../assets/assest.svg";
 import assest1 from "../../../../assets/assest1.svg";
 import "./recommendations.css";
-const Recommendations = ({ id }) => {
+const Recommendations = ({ isMovie, id }) => {
   const [recommendationData, setRecommendationData] = useState([]);
   const [isScroll, setIsScroll] = useState(false);
   //   const [isLoading, setIsLoading] = useState(false);
-
+  
   const scrollHandler = (e) => {
     setIsScroll(
       e.target.scrollLeft + e.target.offsetWidth >= e.target.scrollWidth - 1050
@@ -20,7 +20,7 @@ const Recommendations = ({ id }) => {
     setRecommendationData([]);
 
     const getData = async () => {
-      await GetRecommendation("movie", id).then((response) =>
+      await GetRecommendation(isMovie, id).then((response) =>
         setRecommendationData(response.data.results)
       );
       //   setIsLoading(true);
@@ -28,7 +28,7 @@ const Recommendations = ({ id }) => {
 
     getData();
     // setIsLoading(false);
-  }, [id]);
+  }, [id, isMovie]);
 
   return (
     <div className="recommendation__section container">

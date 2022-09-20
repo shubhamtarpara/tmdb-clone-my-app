@@ -19,7 +19,7 @@ const SingleMovieDetail = () => {
           <Cast id={params.id} isMovie="movie" />
           <Reviews id={params.id} isMovie="movie" />
           <MainMedia id={params.id} isMovie="movie" />
-          <Recommendations id={params.id} />
+          <Recommendations id={params.id} isMovie="movie" />
         </div>
         <div className="movie-right-wrapper">
           <MovieDetailRightSection id={params.id} isMovie="movie" />

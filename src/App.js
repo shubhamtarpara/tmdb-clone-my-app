@@ -8,6 +8,7 @@ import SearchBackground from "./components/SearchBackground";
 import MainTrending from "./components/Trending/MainTrending";
 import Footer from "./components/Footer";
 import SingleMovieDetail from "./components/Single page/Single page movie/SingleMovieDetail";
+import TvDetail from "./components/Tv detail/TvDetail";
 import SearchResult from "./components/Search/SearchResult";
 import Login from "./components/login/Login";
 import SignUp from "./components/signup/SignUp";
@@ -29,6 +30,7 @@ const App = () => {
             }
           />
           <Route path="/movie/details/:id" element={<SingleMovieDetail />} />
+          <Route path="/tv/details/:id" element={<TvDetail />} />
           <Route path="/search/:currentData" element={<SearchResult />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
