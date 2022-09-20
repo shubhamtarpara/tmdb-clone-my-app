@@ -302,7 +302,6 @@
 }
 
 .just-watch-data-hidden {
-
   min-height: 0;
   height: 0;
   width: 0;
@@ -313,12 +312,14 @@
 }
 
 .show-data {
-  min-height: 448px;
+  min-height: 498px;
   height: auto;
   width: 100%;
   display: flex;
+
   color: #fff;
   visibility: visible;
+  padding: 1.5rem 0 !important;
   opacity: 1;
   transition: opacity 750ms;
 }
@@ -328,8 +329,9 @@
   height: 330px;
 } */
 .just-watch-poster img {
-  width: 220px;
-  height: 330px;
+  border-radius: 20px;
+  width: 300px;
+  height: 450px;
 }
 
 .just-watch-detail_container {

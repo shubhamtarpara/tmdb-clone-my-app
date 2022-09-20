@@ -287,7 +287,7 @@ const MovieDetailHeader = ({ id, isMovie }) => {
 
           {/* 3rd data section */}
           <div
-            className={`just-watch-data-hidden ${isActive ? "show-data" : ""}`}
+            className={`container just-watch-data-hidden ${isActive ? "show-data" : ""}`}
           >
             <div className="just-watch-poster">
               <img
