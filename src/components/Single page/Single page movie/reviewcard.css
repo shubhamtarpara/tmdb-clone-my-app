@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.review__rating {
+    padding: 3px 8px;
+    margin-left: 14px;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    background-color: #000;
+    border-color: #000;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 300;
+}
+
+.review__icon {
+    width: 10px;
+    margin-right: 5px;
+}
+
+.review__card {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid rgba(227, 227, 227, 1);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+}
+
+.main-review__section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+
+.review__owner {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: flex-start;
+    display: inline-block;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    font-size: 1.3em;
+    font-weight: 700;
+}
+
+.review__written {
+    display: flex;
+}
+
+.review__written h5 {
+    margin: 0;
+}
+.review__text {
+    font-weight: 300;
+    font-size: 0.7em;
+    margin: 0;
+    opacity: 0.5;
+
+}
+
+.author__name {
+    color: #000;
+    font-weight: 500;
+    opacity: 1;
+    font-size: 0.7em;
+    margin: 0;
+}
+
+.review__length {
+    padding-left: 84px;
+    padding-top: 20px;
+
+}
+
+.review__content {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-family: "Source Sans Pro", Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.author__img {
+    margin-right: 20px;
+}
+
+.author__img img {
+    width: 64px;
+    height: 64px;
+    display: block;
+    border-radius: 50%;
+}

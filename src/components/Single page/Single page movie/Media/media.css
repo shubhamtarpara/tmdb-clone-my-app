@@ -1,0 +1,11 @@
+.backdrop__container {
+    display: flex;
+    overflow-x: auto;
+}
+
+.backdrop img {
+    width: 533px;
+    min-width: 533px;
+    height: 300px;
+    min-height: 300px;
+}

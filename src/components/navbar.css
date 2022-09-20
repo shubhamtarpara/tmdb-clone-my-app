@@ -1,0 +1,161 @@
+.custom_navbar {
+    height: 65px;
+    background-color: rgba(3, 37, 65, 1);
+}
+
+.navbar-brand img {
+    height: 20px;
+    width: 154px;
+}
+
+.nav-link {
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff !important;
+    margin-right: 14px;
+    cursor: pointer;
+
+}
+
+.navbar {
+    padding-top: 0!important;
+}
+.navbar-icon__image {
+    width: 26px;
+    height: 26px;
+}
+
+.navbar-container {
+    padding: 0;
+    margin-top: 4px;
+}
+
+.fa-bars:before,
+.fa-navicon:before {
+    content: "\f0c9";
+}
+
+.custom-navbar-class {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fa-plus {
+    /* font-size: 1.4rem; */
+    height: 1rem;
+    width: 1rem;
+    /* font-weight: bold; */
+}
+
+.language {
+    border: 1px solid #fff;
+    border-radius: 5%;
+    line-height: 10px;
+}
+
+.nav-lan {
+    display: flex;
+    align-items: center;
+}
+
+.nav-mag {
+    margin: 0;
+}
+
+.fa-magnifying-glass {
+    color: #01b4e4;
+}
+
+.movie-items .navbar-nav,
+.tv-items .navbar-nav {
+    position: absolute;
+    background: #fff;
+    z-index: 99;
+    width: 12%;
+    border-radius: 5px;
+    flex-direction: column !important;
+    border: 1px solid #d7d7d7;
+
+}
+
+.movie-items .navbar-nav .nav-link,
+.tv-items .navbar-nav .nav-link {
+    color: #000000 !important;
+    padding: 5px !important;
+}
+
+.movie-items,
+.tv-items {
+    visibility: hidden;
+}
+
+.header-link:hover .movie-items,
+.nav-tv:hover .tv-items {
+    visibility: visible;
+}
+
+.custom-navbar {
+    padding: 0 !important;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none !important;
+}
+
+.hover-bg {
+    padding-left: 20px;
+}
+
+.hover-bg:hover {
+    background-color: rgb(227, 227, 227, 0.5);
+}
+
+.nav-div {
+    color: white;
+}
+
+.nav-item {
+    color: white;
+}
+
+@media (max-width: 1400px) {
+    .custom-navbar {
+        max-width: 100% !important;
+    }
+
+
+}
+
+@media (max-width: 992px) {
+
+    .show {
+        display: flex;
+        flex-direction: column;
+        padding-left: 1rem;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .nav-item {
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-lan {
+        padding: 0.5rem;
+    }
+
+    .nav-link {
+        margin: 0;
+
+    }
+
+    .language {
+        padding: 0.35rem !important;
+    }
+
+    .movie-items .navbar-nav,
+    .tv-items .navbar-nav {
+        width: auto;
+    }
+}

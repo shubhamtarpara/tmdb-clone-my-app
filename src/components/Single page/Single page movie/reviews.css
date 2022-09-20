@@ -1,0 +1,34 @@
+.social-header {
+    display: flex;
+    width: 100%;
+    align-items: baseline;
+}
+
+.social-header ul {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.first-media__panel {
+    border-bottom: 4px solid #000000;
+    color: #000;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.media__panel {
+    color: #000;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.main-social__section {
+    padding: 30px 0 0 0 !important;
+}
+
+.social-panel {
+    border-top: 1px solid #d7d7d7;
+    padding: 30px 0;
+}

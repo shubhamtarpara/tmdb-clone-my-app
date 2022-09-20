@@ -1,0 +1,12 @@
+.poster__container {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.poster {
+    width: 220px;
+    height: 330px;
+    max-width: 220px;
+    max-height: 330px;
+}

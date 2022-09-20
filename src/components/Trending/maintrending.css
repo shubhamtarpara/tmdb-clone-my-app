@@ -1,0 +1,14 @@
+.trending {
+    background-image: url('../../assets/line-background.svg');
+    background-repeat: no-repeat;
+    background-position: 50% 200px;
+
+}
+
+@media (max-width:1400px) {
+
+    .trending {
+        max-width: 100% !important;
+    }
+
+}

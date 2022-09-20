@@ -1,0 +1,56 @@
+.container {
+    padding-top: 0.7em;
+
+}
+
+.show-data__content {
+    gap: 1.25rem;
+    display: flex;
+    flex-direction: row;
+    height: 350px;
+}
+
+.show__data {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    overflow-y: visible;
+    margin-top: 1rem;
+    margin-left: 2rem;
+}
+
+.content_section {
+    padding: 0;
+    position: relative;
+}
+
+.content_section .main-popular {
+    padding-top: 1rem;
+    margin: 0;
+}
+
+
+.fade_up:after {
+    content: '';
+    width: 60px;
+    height: 100%;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    right: -2px;
+    z-index: 1;
+    background-image: linear-gradient(to right, rgba(255,255,255,0) 0%, #fff 100%);
+    will-change: opacity;
+    pointer-events: none;
+}
+
+.fade_up-hidden:after{
+    opacity: 0;
+}
+
+@media (max-width:1400px) {
+    .popular-movie-container {
+        max-width: 100% !important;
+    }
+}

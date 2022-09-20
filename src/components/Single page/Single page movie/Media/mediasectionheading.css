@@ -1,0 +1,36 @@
+.media-heading {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    align-items: baseline;
+}
+
+.media-heading-text {
+    display: inline-block;
+    margin-right: 50px;
+    font-weight: 600;
+    font-size: 1.4em;
+    margin-bottom: 20px;
+
+}
+
+.sub-media-container {
+    display: flex;
+
+}
+
+.media_tab {
+    margin-right: 24px;
+    cursor: pointer;
+}
+
+.media-displayTitle {
+    color: #000;
+    font-weight: 600;
+    font-size: 0.7em;
+    box-sizing: border-box;
+}
+
+.active_tab {
+    border-bottom: 3px solid black;
+}

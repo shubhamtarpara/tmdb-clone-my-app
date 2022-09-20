@@ -1,0 +1,49 @@
+.header-navbar {
+    display: flex;
+    justify-content: center;
+}
+
+.header-link {
+    font-size: 14px;
+    font-weight: 400;
+    color: black;
+   
+    cursor: pointer;
+
+}
+
+.header-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.movie-items,
+.tv-items {
+    visibility: hidden;
+}
+
+.header__sub-nav:hover .movie-items,
+.nav-tv:hover .tv-items {
+    visibility: visible;
+}
+
+.header_main-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 46px;
+    margin: auto;
+}
+
+.header__sub-nav {
+margin: 0 20px;
+}
+
+
+.movie-header__img {
+    width: 8px;
+    height: 10px;
+    margin-left:8px
+}

@@ -1,0 +1,21 @@
+.link_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.social__icon {
+    width: 30px;
+    height: 30px;
+}
+.movie-data_container {
+    margin-top: 1.5rem;
+}
+.movie-data_container p {
+    margin-bottom: 20px;
+}
+.just-watch {
+    padding: 0 10px;
+    border-left: 1px solid #d7d7d7;
+    border-right: 1px solid #d7d7d7;
+}
+

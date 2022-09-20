@@ -1,0 +1,114 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.recommendation__section {
+    position: relative;
+}
+
+.recommendation__container {
+    border-top: 1px solid #d7d7d7;
+    padding: 30px 0;
+}
+
+.recommendation-heading {
+    font-weight: 600;
+    font-size: 1.4em;
+}
+
+.recommendation__data {
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.fade_up-recommendation::after {
+    content: '';
+    width: 60px;
+    height: 100%;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    right: -2px;
+    z-index: 1;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #fff 100%);
+    will-change: opacity;
+    pointer-events: none;
+}
+
+.recommendation__card {
+    margin-top: 20px;
+    width: 250px;
+}
+
+.image__content {
+    position: relative;
+    width: 250px;
+    height: 141px;
+    background-color: #d7d7d7;
+    border-radius: 8px;
+}
+
+.image__content img {
+    border-radius: 8px;
+}
+
+.image__content a:hover {
+    opacity: 1;
+}
+
+.hover__data {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000000;
+    bottom: 0;
+    width: 100%;
+    padding: 4px;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.image__content a:hover .hover__data {
+    opacity: 1;
+}
+
+.hover__date {
+    display: flex;
+    align-items: center;
+}
+
+.recommendation-calender__icon {
+    width: 1.5rem;
+}
+
+.recommendation-icon {
+    display: flex;
+    height: 1.15rem;
+    margin: 4px;
+}
+
+.title__heading {
+    display: flex;
+    justify-content: space-between;
+}
+
+.title__heading a:hover {
+    color: #000000;
+}
+
+.title__heading a {
+    font-weight: 400;
+    font-size: 1em;
+    color: #000000;
+    margin-bottom: 10px;
+    height: 24px;
+    display: inline-block;
+    padding-right: 20px;
+}
