@@ -135,10 +135,6 @@
   color: #fff;
 }
 
-.movie-title-section h2 {
-  font-weight: 700;
-}
-
 .watch-now a:hover,
 .movie-title-section a:hover {
   color: #fff;
@@ -168,6 +164,8 @@
 
 .movie-title-section h2 {
   font-size: 2.2rem;
+  font-weight: 700;
+  margin-top: 45px;
 }
 
 .certification {

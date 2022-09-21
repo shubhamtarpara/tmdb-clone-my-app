@@ -32,7 +32,7 @@ const MovieDetailRightSection = ({ id, isMovie }) => {
 
     getIdData();
     getData();
-  }, [id]);
+  }, [id, isMovie]);
 
   return !isLoading ? (
     ""

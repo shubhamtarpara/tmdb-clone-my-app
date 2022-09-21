@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import { GetDetails } from "../../api";
 import MovieDetailHeaderNavBar from "../Single page/Single page movie/MovieDetailHeaderNavBar";
 import SeasionHeading from "./SeasonHeading";
