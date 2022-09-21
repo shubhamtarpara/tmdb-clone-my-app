@@ -7,6 +7,7 @@ import Cast from "../Single page/Single page movie/Cast";
 import TvDetailHeader from "./TvDetailHeader";
 import SeasonCard from "./SeasonCard";
 import "./tvdetail.css";
+import MovieDetailRightSection from "../Single page/Single page movie/MovieDetailRightSection";
 const TvDetail = () => {
   const params = useParams();
 
@@ -22,7 +23,7 @@ const TvDetail = () => {
               <SeasonCard id={params.id} />
               {
                 <p className="view-season new_button">
-                  <Link to={`/tv/seasons/${params.id}`}>View All Seasons</Link>
+                  <Link to={`/tv/season/${params.id}`}>View All Seasons</Link>
                 </p>
               }
             </div>
@@ -30,6 +31,9 @@ const TvDetail = () => {
           <Reviews id={params.id} isMovie="tv" />
           <MainMedia id={params.id} isMovie="tv" />
           <Recommendations id={params.id} isMovie="tv" />
+        </div>
+        <div className="movie-right-wrapper">
+          <MovieDetailRightSection id={params.id} isMovie="tv" />
         </div>
       </div>
     </>

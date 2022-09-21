@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { GetKeywords } from "../../../api";
-import './keyword.css'
+import "./keyword.css";
 
 const KeyWord = ({ id, isMovie }) => {
+  console.log(isMovie)
   const [keywordsData, setKeywordsData] = useState([]);
 
   useEffect(() => {
@@ -10,6 +11,7 @@ const KeyWord = ({ id, isMovie }) => {
     const GetKeywordsData = async () => {
       await GetKeywords(isMovie, id).then((response) => {
         setKeywordsData(response.data.keywords);
+        console.log(response)
       });
     };
     GetKeywordsData();

@@ -63,7 +63,7 @@ const DetailCard = ({
               />
             </div>
 
-            <Link to={`/${isMovie}/details/${id}`} title={title}>
+            <Link to={`/${isMovie}/detail/${id}`} title={title}>
               <img
                 src={poster_path}
                 className="poster-img one"
@@ -95,7 +95,7 @@ const DetailCard = ({
                       src={bookmark}
                       alt="tooltip-icon"
                     />
-                    <p>Warchlist`</p>
+                    <p>Watchlist</p>
                   </li>
                   <li className="main-tooltip-container">
                     <img

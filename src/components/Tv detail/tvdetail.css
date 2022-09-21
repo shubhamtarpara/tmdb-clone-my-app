@@ -2,3 +2,12 @@
     border-top: 1px solid rgb(227, 227, 227);
 }
 
+.new_button {
+    margin: 1rem 0 0 0;
+}
+
+.new_button a {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: black;
+}

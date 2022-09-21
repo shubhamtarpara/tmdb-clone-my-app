@@ -54,7 +54,7 @@ const Recommendations = ({ isMovie, id }) => {
                     >
                       <div className="image__content ">
                         <Link
-                          to={`/movie/details/${recommendationMovie.id}`}
+                          to={`/movie/detail/${recommendationMovie.id}`}
                           title={recommendationMovie.title}
                           alt={recommendationMovie.title}
                         >
@@ -95,7 +95,7 @@ const Recommendations = ({ isMovie, id }) => {
                       <p className="title__heading">
                         <Link
                           className="title"
-                          to={`/movie/details/${recommendationMovie.id}`}
+                          to={`/movie/detail/${recommendationMovie.id}`}
                           title={recommendationMovie.title}
                           alt={recommendationMovie.title}
                         >

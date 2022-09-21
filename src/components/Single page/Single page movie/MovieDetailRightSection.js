@@ -18,14 +18,14 @@ const MovieDetailRightSection = ({ id, isMovie }) => {
 
   useEffect(() => {
     const getData = async () => {
-      await GetDetails("movie", id).then((response) => {
+      await GetDetails(isMovie, id).then((response) => {
         setMovieData(response.data);
       });
       setIsLoading(true);
     };
 
     const getIdData = async () => {
-      await GetExternalIDs("movie", id).then((response) => {
+      await GetExternalIDs(isMovie, id).then((response) => {
         setExternalIdData(response.data);
       });
     };

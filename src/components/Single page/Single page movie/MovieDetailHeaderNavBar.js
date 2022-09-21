@@ -73,7 +73,7 @@ const MovieDetailHeaderNavBar = () => {
           </div>
           <div className="header__sub-nav ">
             <span className="header-link">
-              FandDom
+              Fandom
               <img src={dropDownArrow} alt="1" className="movie-header__img" />
             </span>
             <div className="movie-items ">

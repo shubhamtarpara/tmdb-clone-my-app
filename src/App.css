@@ -2,7 +2,9 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: 'Source Sans Pro', Arial, sans-serif;
+  font-family: 'Nunito', sans-serif !important;
+
+
 }
 
 a {
@@ -17,7 +19,8 @@ ul {
 }
 
 body {
-  font-family: "Source Sans Pro", Arial, sans-serif !important;
+  font-family: 'Nunito', sans-serif !important;
+
   display: flex !important;
 }
 
