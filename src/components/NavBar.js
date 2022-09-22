@@ -47,24 +47,24 @@ const NavBar = () => {
                       <div className="tv-items ">
                         <ul className="navbar-nav">
                           <li className="nav-item hover-bg">
-                            <div className="nav-link " to="/movie/popular">
+                            <Link className="nav-link " to="/movie/popular">
                               Popular
-                            </div>
+                            </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <div className="nav-link " to="/movie/now_playing">
+                            <Link className="nav-link " to="/movie/now_playing">
                               Now Playing
-                            </div>
+                            </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <div className="nav-link " to="/movie/upcoming">
+                            <Link className="nav-link " to="/movie/upcoming">
                               Upcoming
-                            </div>
+                            </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <div className="nav-link " to="/movie/top_rated">
+                            <Link className="nav-link " to="/movie/top_rated">
                               Top Rated
-                            </div>
+                            </Link>
                           </li>
                         </ul>
                       </div>
@@ -74,24 +74,24 @@ const NavBar = () => {
                       <div className="tv-items ">
                         <ul className="navbar-nav ">
                           <li className="nav-item hover-bg">
-                            <div className="nav-link  " to="/tv/popular">
+                            <Link className="nav-link  " to="/tv/popular">
                               Popular
-                            </div>
+                            </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <div className="nav-link  " to="/tv/airing_today">
+                            <Link className="nav-link  " to="/tv/airing_today">
                               Airing Today
-                            </div>
+                            </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <div className="nav-link  " to="/tv/on_the_air">
+                            <Link className="nav-link  " to="/tv/on_the_air">
                               On TV
-                            </div>
+                            </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <div className="nav-link  " to="/tv/top_rated">
+                            <Link className="nav-link  " to="/tv/top_rated">
                               Top Rated
-                            </div>
+                            </Link>
                           </li>
                         </ul>
                       </div>

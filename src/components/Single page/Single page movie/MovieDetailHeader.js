@@ -27,7 +27,7 @@ const MovieDetailHeader = ({ id, isMovie }) => {
   useEffect(() => {
     const getData = async () => {
       await GetWatchProvider(isMovie, id).then((response) => {
-        console.log("Movie detail header", response.data);
+        // console.log("Movie detail header", response.data);
       });
     };
     getData();

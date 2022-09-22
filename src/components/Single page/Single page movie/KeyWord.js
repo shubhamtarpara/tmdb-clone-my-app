@@ -3,7 +3,7 @@ import { GetKeywords } from "../../../api";
 import "./keyword.css";
 
 const KeyWord = ({ id, isMovie }) => {
-  console.log(isMovie)
+  // console.log(isMovie)
   const [keywordsData, setKeywordsData] = useState([]);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ const KeyWord = ({ id, isMovie }) => {
     const GetKeywordsData = async () => {
       await GetKeywords(isMovie, id).then((response) => {
         setKeywordsData(response.data.keywords);
-        console.log(response)
+        // console.log(response)
       });
     };
     GetKeywordsData();
