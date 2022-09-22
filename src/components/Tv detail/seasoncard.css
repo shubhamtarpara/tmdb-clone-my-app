@@ -44,11 +44,14 @@
     margin-top: 28px;
 }
 
-.new_button {
+.view-all-btn {
     margin: 1rem 0 0 0;
 }
-.new_button a {
+.view-all-btn a {
     font-weight: 600;
     font-size: 1.1em;
     color: black;
+}
+.view-all-btn a:hover {
+    color: rgba(0,0,0,0.5);
 }

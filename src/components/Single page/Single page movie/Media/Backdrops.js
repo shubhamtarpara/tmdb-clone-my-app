@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GetImage } from "../../../../api";
-import './backdrop.css';
+import thumbnailImage from "../../../../assets/thumbnail.svg";
+import "./backdrop.css";
 
 const Backdrops = ({ isMovie, id }) => {
   const [imageData, setImageData] = useState([]);
@@ -23,7 +24,7 @@ const Backdrops = ({ isMovie, id }) => {
                 src={
                   imageData.file_path
                     ? `https://www.themoviedb.org/t/p/w533_and_h300_bestv2${imageData.file_path}`
-                    : ""
+                    : thumbnailImage
                 }
                 alt="backdrop"
               />

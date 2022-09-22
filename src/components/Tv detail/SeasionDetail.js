@@ -3,6 +3,7 @@ import {useParams } from "react-router-dom";
 import { GetDetails } from "../../api";
 import MovieDetailHeaderNavBar from "../Single page/Single page movie/MovieDetailHeaderNavBar";
 import SeasionHeading from "./SeasonHeading";
+import thumbnailImage from '../../assets/thumbnail.svg'
 
 const SeasionDetail = ({ id }) => {
   const params = useParams();
@@ -35,7 +36,7 @@ const SeasionDetail = ({ id }) => {
                         src={
                           data.poster_path
                             ? `https://www.themoviedb.org/t/p/w130_and_h195_bestv2${data.poster_path}`
-                            : ""
+                            : thumbnailImage
                         }
                         alt={data.name}
                       />

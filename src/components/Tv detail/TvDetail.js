@@ -22,7 +22,7 @@ const TvDetail = () => {
               <h3>Current Season</h3>
               <SeasonCard id={params.id} />
               {
-                <p className="view-season new_button">
+                <p className="view-season view-all-btn">
                   <Link to={`/tv/season/${params.id}`}>View All Seasons</Link>
                 </p>
               }

@@ -17,6 +17,7 @@ import expand from "../../assets/expand.svg";
 import justwatchYello from "../../assets/justwatch-yellow.svg";
 import closeBtn from "../../assets/close.svg";
 
+
 const TvDetailHeader = ({ id, isMovie }) => {
   const [currentMovieData, setCurrentMovieData] = useState({});
   const [watchProvider, setWatchProvider] = useState({});
@@ -114,7 +115,7 @@ const TvDetailHeader = ({ id, isMovie }) => {
             src={
               currentMovieData.backdrop_path
                 ? `https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces${currentMovieData.backdrop_path}`
-                : ""
+                : thumbnailImage
             }
             alt="movie-detail__header"
             className="movie-detail__header"

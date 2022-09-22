@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GetVideo } from "../../../../api";
 import { GetImage } from "../../../../api";
+import thumbnailimage from '../../../../assets/thumbnail.svg'
 import Youtube from "react-youtube";
 import "./media.css";
 
@@ -52,7 +53,7 @@ const Media = ({ id, isMovie }) => {
                   src={
                     imageData.file_path
                       ? `https://www.themoviedb.org/t/p/w533_and_h300_bestv2${imageData.file_path}`
-                      : ""
+                      : thumbnailimage
                   }
                   alt="backdrop"
                 />

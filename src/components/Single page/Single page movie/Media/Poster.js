@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { GetImage } from "../../../../api";
+import thumbnailimage from '../../../../assets/thumbnail.svg'
 import './poster.css'
 const Poster = ({ isMovie, id }) => {
   const [imageData, setImageData] = useState([]);
@@ -23,7 +24,7 @@ const Poster = ({ isMovie, id }) => {
                 src={
                   imageData.file_path
                     ? `https://www.themoviedb.org/t/p/w220_and_h330_face${imageData.file_path}`
-                    : ""
+                    : thumbnailimage
                 }
                 alt="poster"
               />
