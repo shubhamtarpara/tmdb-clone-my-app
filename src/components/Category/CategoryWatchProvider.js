@@ -16,6 +16,7 @@ const CategoryWatchProvider = ({
     GetCategoryWatchProvider(currentWatchCountry).then((response) =>
       setCategoryWatchProvider(response.data.results)
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentWatchCountry]);
 
   const activeCategoryWatchProviderHandler = (provider_id) => {
