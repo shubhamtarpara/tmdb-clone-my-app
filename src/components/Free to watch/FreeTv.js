@@ -9,6 +9,7 @@ const FreeTv = () => {
   useEffect(() => {
     freeToWatchMovieApi("tv", 1).then((response) => {
       setPopularMovieData(response.data.results);
+      console.log(response.data.results)
     });
   }, []);
 

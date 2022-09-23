@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import './maincategory.css'
+import "./maincategory.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Language } from "./Language";
@@ -42,7 +42,6 @@ const CategorySection = () => {
     }
   };
   const params = useParams();
-
   document.title = `${params.category} ${params.isMovie} - The Movie Database (TMDB)`;
 
   useEffect(() => {
@@ -177,6 +176,56 @@ const CategorySection = () => {
                   "filter " + (showFilterPanel ? "height-100" : "height-0")
                 }
               >
+                <div className="show-me-section">
+                  <h3>Show Me</h3>
+                  <label className="w-100 d-inline-flex align-items-center">
+                    <input
+                      id="all_availabilities"
+                      type="checkbox"
+                      className="checkbox-input round-checkbox-input me-1"
+                      name="all_availabilities"
+                      disabled
+                    />
+                    <label
+                      htmlFor="all_availabilities"
+                      className="all_availabilities"
+                    >
+                      Everything
+                    </label>
+                  </label>
+                  <label className="w-100 d-inline-flex align-items-center">
+                    <input
+                      id="all_availabilities"
+                      type="checkbox"
+                      className="checkbox-input round-checkbox-input me-1"
+                      name="all_availabilities"
+                      disabled
+                    />
+                    <label
+                      htmlFor="all_availabilities"
+                      className="all_availabilities disabled-checkbox"
+                      
+                    >
+                      Movies I Haven't Seen
+                    </label>
+                  </label>
+                  <label className="w-100 d-inline-flex align-items-center">
+                    <input
+                      id="all_availabilities"
+                      type="checkbox"
+                      className="checkbox-input round-checkbox-input me-1"
+                      name="all_availabilities"
+                      disabled
+                    />
+                    <label
+                      htmlFor="all_availabilities"
+                      className="all_availabilities disabled-checkbox"
+                      
+                    >
+                      Movies I Have Seen
+                    </label>
+                  </label>
+                </div>
                 <div className="availabilities-section">
                   <h3>Availabilities</h3>
                   <label className="w-100 d-inline-flex align-items-center">
@@ -562,9 +611,9 @@ const CategorySection = () => {
         <div className="right-category-section w-80 h-100 mx-auto">
           {!showSearchSection ? (
             params.isMovie === "movie" ? (
-              <MovieCategory category={params.category} url={url} />
+              <MovieCategory category={params.category} />
             ) : (
-              <TvCategory category={params.category} url={url} />
+              <TvCategory category={params.category} />
             )
           ) : (
             <SearchCategory url={url} isMovie={params.isMovie} />

@@ -32,7 +32,7 @@ const MovieCategory = ({ category }) => {
         pageStart={1}
         loadMore={fetchData}
         hasMore={moreData}
-        className="infinite-scroll-categoryData"
+        className="infinite-class"
       >
         {categoryData.map((data) => {
           return (
@@ -44,8 +44,8 @@ const MovieCategory = ({ category }) => {
                   ? `https://www.themoviedb.org/t/p/w220_and_h330_face/${data.poster_path}`
                   : thumbnailImage
               }
-              title={data.title}
-              release_date={data.release_date}
+              title={data.original_name}
+              release_date={data.first_air_date}
               popularity={data.vote_average * 10}
               className={true}
               isMovie="tv"

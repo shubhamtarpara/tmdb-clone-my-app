@@ -5,6 +5,7 @@ import { GetCategoryData } from "../../api";
 import InfiniteScroll from "react-infinite-scroller";
 
 const MovieCategory = ({ category }) => {
+  
   const [categoryData, setCategoryData] = useState([]);
   const [moreData, setMoreData] = useState(false);
 
