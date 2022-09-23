@@ -2,29 +2,35 @@ import React, { useState, useEffect } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { GetCategoryWatchProvider } from "../../api";
 
-const CatagoryWatchProvider = ({
-  watchCountry,
-  watchProvider,
-  setWatchProvider,
+const CategoryWatchProvider = ({
+  currentWatchCountry,
+  activeCategoryWatchProvider,
+  setActiveCategoryWatchProvider,
 }) => {
   const [categoryWatchProvider, setCategoryWatchProvider] = useState([]);
 
   useEffect(() => {
-    setWatchProvider([]);
-    GetCategoryWatchProvider(watchCountry).then((response) => {
-      setCategoryWatchProvider(response.data.results);
-      // console.log(catagoryWatchProvider)
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchCountry]);
+    setCategoryWatchProvider([]);
+    setActiveCategoryWatchProvider([]);
 
-  const watchproviderHandler = (watchp_id) => {
-    if (watchProvider.includes(watchp_id)) {
-      setWatchProvider(watchProvider.filter((item) => item !== watchp_id));
+    GetCategoryWatchProvider(currentWatchCountry).then((response) =>
+      setCategoryWatchProvider(response.data.results)
+    );
+  }, [currentWatchCountry]);
+
+  const activeCategoryWatchProviderHandler = (provider_id) => {
+    if (activeCategoryWatchProvider.includes(provider_id)) {
+      setActiveCategoryWatchProvider(
+        activeCategoryWatchProvider.filter((item) => item !== provider_id)
+      );
     } else {
-      setWatchProvider((pre) => [...pre, watchp_id]);
+      setActiveCategoryWatchProvider((prevState) => [
+        ...prevState,
+        provider_id,
+      ]);
     }
   };
+
   return (
     <div className="ott-provider-wrapper pt-3">
       <ul className="ott-provider ">
@@ -37,7 +43,7 @@ const CatagoryWatchProvider = ({
             >
               <li
                 className="position-relative hover-li"
-                onClick={() => watchproviderHandler(data.provider_id)}
+                onClick={() => activeCategoryWatchProviderHandler(data.provider_id)}
               >
                 <div className="icon-image-container">
                   <img
@@ -51,7 +57,7 @@ const CatagoryWatchProvider = ({
                 <div
                   className={
                     "hover-div " +
-                    (watchProvider.includes(data.provider_id)
+                    (activeCategoryWatchProvider.includes(data.provider_id)
                       ? "active-icon-class"
                       : "")
                   }
@@ -66,4 +72,4 @@ const CatagoryWatchProvider = ({
     </div>
   );
 };
-export default CatagoryWatchProvider;
+export default CategoryWatchProvider;

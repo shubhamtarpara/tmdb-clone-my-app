@@ -20,6 +20,7 @@ const MovieDetailRightSection = ({ id, isMovie }) => {
     const getData = async () => {
       await GetDetails(isMovie, id).then((response) => {
         setMovieData(response.data);
+        console.log(response.data, 'movie data')
       });
       setIsLoading(true);
     };
@@ -94,7 +95,7 @@ const MovieDetailRightSection = ({ id, isMovie }) => {
               Original Language
               <br />
             </strong>
-            {movieData.spoken_languages[0].english_name}
+            {movieData.spoken_languages[0] ? movieData.spoken_languages.english_name : 'No data'}
           </p>
         </div>
         <div className="movie-budget">

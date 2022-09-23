@@ -11,7 +11,7 @@ import SingleMovieDetail from "./components/Single page/Single page movie/Single
 import TvDetail from "./components/Tv detail/TvDetail";
 import SeasonDetail from "./components/Tv detail/SeasionDetail";
 import SearchResult from "./components/Search/SearchResult";
-import MainCatagory from "./components/Catagory/MainCatagory";
+import MainCategory from "./components/Category/MainCategory";
 import Login from "./components/login/Login";
 import SignUp from "./components/Signup/SignUp";
 const App = () => {
@@ -33,7 +33,7 @@ const App = () => {
           />
           <Route path="/movie/detail/:id" element={<SingleMovieDetail />} />
           <Route path="/tv/detail/:id" element={<TvDetail />} />
-          <Route path="/:isMovie/:category" element={<MainCatagory />} />
+          <Route path="/:isMovie/:category" element={<MainCategory />} />
           <Route path="/tv/season/:id" element={<SeasonDetail />} />
           <Route path="/search/:currentData" element={<SearchResult />} />
           <Route path="/login" element={<Login />} />

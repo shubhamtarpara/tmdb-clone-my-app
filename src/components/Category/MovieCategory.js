@@ -3,6 +3,7 @@ import DetailCard from "../DetailCard";
 import thumbnailImage from "../../assets/thumbnail.svg";
 import { GetCategoryData } from "../../api";
 import InfiniteScroll from "react-infinite-scroller";
+
 const MovieCategory = ({ category }) => {
   const [categoryData, setCategoryData] = useState([]);
   const [moreData, setMoreData] = useState(false);
@@ -31,7 +32,7 @@ const MovieCategory = ({ category }) => {
         pageStart={1}
         loadMore={fetchData}
         hasMore={moreData}
-        className="infinite-scroll-categoryData"
+        className="infinite-class"
       >
         {categoryData.map((data) => {
           return (

@@ -75,11 +75,16 @@ export const GetCategoryWatchProvider = (country) => {
   const categoryWatchProviderURL = `https://api.themoviedb.org/3/watch/providers/movie?api_key=${process.env.REACT_APP_API_KEY}&watch_region=${country}`;
   return axios.get(categoryWatchProviderURL);
 };
-export const CateKeywordURL = () => {
-  const cateKeywordURL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}`;
-  return axios.get(cateKeywordURL);
+export const CategoryKeywordURL = () => {
+  const CategoryKeywordURL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.REACT_APP_API_KEY}`;
+
+  return axios.get(CategoryKeywordURL);
 };
 export const GetCategoryData = (isMovie, category, page) => {
   const categoryURL = `https://api.themoviedb.org/3/${isMovie}/${category}?api_key=${process.env.REACT_APP_API_KEY}&page=${page}`;
+  return axios.get(categoryURL);
+};
+export const GetDiscoverData = (isMovie, url, page) => {
+  const categoryURL = `https://api.themoviedb.org/3/discover/${isMovie}?api_key=${process.env.REACT_APP_API_KEY}&${url}&page=${page}`;
   return axios.get(categoryURL);
 };
