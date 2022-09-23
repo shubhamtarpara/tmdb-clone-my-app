@@ -13,7 +13,7 @@ import SeasonDetail from "./components/Tv detail/SeasionDetail";
 import SearchResult from "./components/Search/SearchResult";
 import MainCategory from "./components/Category/MainCategory";
 import Login from "./components/login/Login";
-import SignUp from "./components/Signup/SignUp";
+// import SignUp from "./components/Signup/SignUp";
 const App = () => {
   return (
     <div>
@@ -37,7 +37,7 @@ const App = () => {
           <Route path="/tv/season/:id" element={<SeasonDetail />} />
           <Route path="/search/:currentData" element={<SearchResult />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          {/* <Route path="/signup" element={<SignUp />} /> */}
         </Routes>
         <Footer />
       </Router>
