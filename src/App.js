@@ -13,7 +13,8 @@ import SeasonDetail from "./components/Tv detail/SeasionDetail";
 import SearchResult from "./components/Search/SearchResult";
 import MainCategory from "./components/Category/MainCategory";
 import Login from "./components/login/Login";
-import SignUp from "./components/Signup/SignUp";
+import SignUp from "./components/signup/SignUp";
+
 const App = () => {
   return (
     <div>
