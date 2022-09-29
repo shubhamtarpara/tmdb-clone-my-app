@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
@@ -20,11 +21,29 @@ import FilterSectionAccordian from "./FilterSection";
 
 const CategoryPage = () => {
   const { showType, categoryType } = useParams();
+  const [movies, setMovies] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [totalPages, setTotalPages] = useState(null);
+  const [dropdownTitle, setDropdownTitle] = useState("Popularity Descending");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [genresList, setGenresList] = useState(null);
+  const [activeGenresArray, setActiveGenresArray] = useState([]);
+  const [CertificationList, setCertificationList] = useState(null);
+  const [activeCertificationsArray, setActiveCertificationsArray] = useState([]);
+  const [countriesList, setCountriesList] = useState(null);
+  const [ottRegionsList, setOttRegionsList] = useState(null);
+  const [ottProvidersList, setOttProvidersList] = useState(null);
+  const [activeOttProviders, setActiveOttProviders] = useState([]);
+  const [progress, setProgress] = useState(10);
+  const [isAllAvailabilities, setIsAllAvailabilities] = useState(true);
+  const [isAllReleases, setIsAllReleases] = useState(true);
+  const [isAllCountries, setIsAllCountries] = useState(true);
+  const [languagesList, setLanguagesList] = useState(null);
 
   const [defaultParams, setDefaultParams] = useState(
     getInitialParams(showType, categoryType)
   );
-
   const [urlParams, setUrlParams] = useState(
     getInitialParams(showType, categoryType)
   );
@@ -34,7 +53,6 @@ const CategoryPage = () => {
     setDefaultParams(getInitialParams(showType, categoryType));
   }, [showType, categoryType]);
 
-  const [movies, setMovies] = useState(null);
 
   const generateUrl = useCallback(
     (params) => {
@@ -55,13 +73,9 @@ const CategoryPage = () => {
     setDiscoverUrl(generateUrl(defaultParams));
   }, [defaultParams, generateUrl]);
 
-  const [loading, setLoading] = useState(true);
-  const [, setError] = useState(null);
 
-  const [hasMore, setHasMore] = useState(false);
-  const [totalPages, setTotalPages] = useState(null);
 
-  const [dropdownTitle, setDropdownTitle] = useState("Popularity Descending");
+
 
   useEffect(() => {
     switch (urlParams.sort_by) {
@@ -95,23 +109,7 @@ const CategoryPage = () => {
     }
   }, [urlParams.sort_by]);
 
-  const [genresList, setGenresList] = useState(null);
-  const [activeGenresArray, setActiveGenresArray] = useState([]);
-  const [CertificationList, setCertificationList] = useState(null);
-  const [activeCertificationsArray, setActiveCertificationsArray] = useState(
-    []
-  );
-  const [countriesList, setCountriesList] = useState(null);
-  const [ottRegionsList, setOttRegionsList] = useState(null);
-  const [ottProvidersList, setOttProvidersList] = useState(null);
-  const [activeOttProviders, setActiveOttProviders] = useState([]);
-  const [progress, setProgress] = useState(10);
-  const [isAllAvailabilities, setIsAllAvailabilities] = useState(true);
-  const [isAllReleases, setIsAllReleases] = useState(true);
 
-  const [isAllCountries, setIsAllCountries] = useState(true);
-
-  const [languagesList, setLanguagesList] = useState(null);
   const toggleAllAvailabilities = () => {
     setIsAllAvailabilities(!isAllAvailabilities);
   };
@@ -403,14 +401,6 @@ const CategoryPage = () => {
 
   return (
     <>
-      <LoadingBar
-        color="#01b4e4"
-        progress={progress}
-        onLoaderFinished={() => setProgress(0)}
-        shadow={true}
-        height={4}
-        transitionTime={400}
-      />
       <section className="content container">
         <div className="media">
           <div className="column d-flex align-items-start w-100 justify-content-center align-content-start">
@@ -502,20 +492,7 @@ const CategoryPage = () => {
                                       key={country.iso_3166_1}
                                       eventKey={country.iso_3166_1}
                                     >
-                                      <img
-                                        src={`https://raw.githubusercontent.com/SujalShah3234/All-Country-Flags/master/${country.iso_3166_1}.png`}
-                                        onError={(e) => {
-                                          e.target.onerror = null;
-                                          e.target.src =
-                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8wkWFOYkdG7W9Xf0-aheuTMQHTEsySnpXOQ&usqp=CAU";
-                                        }}
-                                        style={{
-                                          width: "24px",
-                                          height: "20px",
-                                          marginRight: "10px",
-                                        }}
-                                        alt={country.iso_3166_1}
-                                      />
+                                     
                                       {country.native_name}
                                     </Dropdown.Item>
                                   ))}
