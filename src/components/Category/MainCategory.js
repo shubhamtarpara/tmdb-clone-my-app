@@ -1,939 +1,709 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import "./maincategory.css";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { Language } from "./Language";
-import { Country } from "./Country";
-import MovieCategory from "./MovieCategory";
-import CategoryWatchProvider from "./CategoryWatchProvider";
-import TvCategory from "./TvCategory";
-import SearchCategory from "./SearchCategory";
-import Slider from "@mui/material/Slider";
-// import cal from '../../assets/calender.svg'
+import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  Dropdown,
+  Accordion,
+  OverlayTrigger,
+  Tooltip,
+  Form,
+} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import LoadingBar from 'react-top-loading-bar';
 
-import { CategoryKeywordURL } from "../../api";
+import { API, API_URL } from '../../Constants';
+import FilterMovieCard from './FilterMovieCard';
 
-const CategorySection = () => {
-  const params = useParams();
-  document.title = `${params.category} ${params.isMovie} - The Movie Database (TMDB)`;
+import 'react-datepicker/dist/react-datepicker.css';
+import './maincategory.css';
 
-  useEffect(() => {
-    CategoryKeywordURL().then((response) => setGenreList(response.data.genres));
-  }, []);
+import getInitialParams from './Params';
 
-  const [showSortPanel, setShowSortPanel] = useState(false);
-  const [showFilterPanel, setShowFilterPanel] = useState(false);
-  const [showWatchPanel, setShowWatchPanel] = useState(false);
-  const [genreList, setGenreList] = useState([]);
-  const [sortValue, setSortValue] = useState("popularity.desc");
-  const [monetizationTypes, setMonetizationTypes] = useState([]);
-  const [releaseType, setReleaseType] = useState([]);
-  const [currentSearchCountry, setCurrentSearchCountry] = useState("IN");
-  const [fromDate, setFromDate] = useState();
-  const [toDate, setToDate] = useState(new Date());
-  const [currentWatchCountry, setCurrentWatchCountry] = useState("IN");
-  const [activeGenreList, setActiveGenreList] = useState([]);
-  const [activeCategoryWatchProvider, setActiveCategoryWatchProvider] =
-    useState([]);
-  const [userScoreValue, setUserScoreValue] = useState([0, 10]);
-  const [minimumUserVotes, setMinimumUserVotes] = useState(0);
-  const [runtimeUser, setRuntimeUser] = useState([0, 400]);
-  const [currentLanguage, setCurrentLanguage] = useState("en");
-  // const [certificate, setCertificate] = useState(['PG-13']);
-  // const [certificateCountry, setCertificateCountry] = useState("IN");
-  const [url, setUrl] = useState("");
-  const [showSearchSection, setShowSearchSection] = useState(false);
+import SortSectionAccordian from './SortSection';
+import FilterSectionAccordian from './FilterSection';
 
-  const searchBtnHandler = () => {
-    const myCurrentURL = `&sort_by=${sortValue}&release_date.gte=${
-      fromDate ? fromDate.toLocaleDateString("en-CA") : ""
-    }&release_date.lte=${toDate.toLocaleDateString(
-      "en-CA"
-    )}&with_genres=${activeGenreList.join(
-      ","
-    )}&with_watch_monetization_types=${activeCategoryWatchProvider.join(
-      "|"
-    )}&with_release_type=${releaseType.join(
-      "|"
-    )}&with_original_language=${currentLanguage}&vote_average.gte=${
-      userScoreValue[0]
-    }&vote_average.lte=${
-      userScoreValue[1]
-    }&vote_count.gte=${minimumUserVotes}&with_runtime.gte=${
-      runtimeUser[0]
-    }&with_runtime.lte=${
-      runtimeUser[1]
-    }&with_ott_providers=${activeCategoryWatchProvider.join(
-      "|"
-    )}
-`;
+const CategoryPage = () => {
+  const { showType, categoryType } = useParams(); // Get params from url
 
-    setUrl(myCurrentURL);
-    setShowSearchSection(true);
-  };
+  // Default Parameters when categoryType changed
+  const [defaultParams, setDefaultParams] = useState(
+    getInitialParams(showType, categoryType)
+  );
 
-  const initialState = {
-    all_availabilities: true,
-    stream: true,
-    free: true,
-    ads: true,
-    rent: true,
-    buy: true,
-    release: true,
-    countries: true,
-    premiere: true,
-    theatrical: true,
-    theatricalLimited: true,
-    digital: true,
-    physical: true,
-    tv: true,
-  };
-
-  const [isChecked, setIsChecked] = useState(initialState);
+  // Parameters when filter changes
+  const [urlParams, setUrlParams] = useState(
+    getInitialParams(showType, categoryType)
+  );
 
   useEffect(() => {
-    if (isChecked.all_availabilities === true) {
-      setMonetizationTypes([]);
-    } else {
-      if (isChecked.stream === true) {
-        if (!monetizationTypes.includes("flatrate")) {
-          setMonetizationTypes((prevState) => [...prevState, "flatrate"]);
-        }
-      } else {
-        if (monetizationTypes.includes("flatrate")) {
-          setMonetizationTypes(
-            monetizationTypes.filter((item) => item !== "flatrate")
-          );
-        }
-      }
-      if (isChecked.ads === true) {
-        if (!monetizationTypes.includes("ads")) {
-          setMonetizationTypes((prevState) => [...prevState, "ads"]);
-        }
-      } else {
-        if (monetizationTypes.includes("ads")) {
-          setMonetizationTypes(
-            monetizationTypes.filter((item) => item !== "ads")
-          );
-        }
-      }
-      if (isChecked.free === true) {
-        if (!monetizationTypes.includes("free")) {
-          setMonetizationTypes((prevState) => [...prevState, "free"]);
-        }
-      } else {
-        if (monetizationTypes.includes("free")) {
-          setMonetizationTypes(
-            monetizationTypes.filter((item) => item !== "free")
-          );
-        }
-      }
-      if (isChecked.buy === true) {
-        if (!monetizationTypes.includes("buy")) {
-          setMonetizationTypes((prevState) => [...prevState, "buy"]);
-        }
-      } else {
-        if (monetizationTypes.includes("buy")) {
-          setMonetizationTypes(
-            monetizationTypes.filter((item) => item !== "buy")
-          );
-        }
-      }
-      if (isChecked.rent === true) {
-        if (!monetizationTypes.includes("rent")) {
-          setMonetizationTypes((prevState) => [...prevState, "rent"]);
-        }
-      } else {
-        if (monetizationTypes.includes("rent")) {
-          setMonetizationTypes(
-            monetizationTypes.filter((item) => item !== "rent")
-          );
-        }
-      }
+    setUrlParams(getInitialParams(showType, categoryType));
+    setDefaultParams(getInitialParams(showType, categoryType));
+  }, [showType, categoryType]);
 
-      console.log(isChecked);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isChecked.all_availabilities,
-    isChecked.buy,
-    isChecked.stream,
-    isChecked.free,
-    isChecked.ads,
-    isChecked.rent,
-  ]);
+  const [movies, setMovies] = useState(null); //Array of movies
+
+  const generateUrl = useCallback(
+    (params) => {
+      let url = `${API_URL}/discover/${showType}?api_key=${API}`;
+      Object.keys(params).forEach((key) => {
+        if (params[key]) {
+          url = `${url}&${key}=${params[key]}`;
+        }
+      });
+      return url;
+    },
+    [showType]
+  );
+
+  const [discoverUrl, setDiscoverUrl] = useState(generateUrl(urlParams));
 
   useEffect(() => {
-    if (isChecked.release === true) {
-      setReleaseType([]);
+    setDiscoverUrl(generateUrl(defaultParams));
+  }, [defaultParams, generateUrl]);
+
+  //Fetch movies based on type
+  const [loading, setLoading] = useState(true); //Loading
+  const [error, setError] = useState(null); //Error handling
+
+  const [hasMore, setHasMore] = useState(false); //Infinite scroll
+  const [totalPages, setTotalPages] = useState(null); //total pages of movies
+
+  const [dropdownTitle, setDropdownTitle] = useState('Popularity Descending'); //Dropdown title
+
+  useEffect(() => {
+    switch (urlParams.sort_by) {
+      case 'popularity.desc':
+        setDropdownTitle('Popularity Descending');
+        break;
+      case 'popularity.asc':
+        setDropdownTitle('Popularity Ascending');
+        break;
+      case 'vote_average.desc':
+        setDropdownTitle('Rating Descending');
+        break;
+      case 'vote_average.asc':
+        setDropdownTitle('Rating Ascending');
+        break;
+      case 'primary_release_date.desc':
+        setDropdownTitle('Release Date Descending');
+        break;
+      case 'primary_release_date.asc':
+        setDropdownTitle('Release Date Ascending');
+        break;
+      case 'title.asc':
+        setDropdownTitle('Title (A-Z)');
+        break;
+      case 'title.desc':
+        setDropdownTitle('Title (Z-A)');
+        break;
+      default:
+        setDropdownTitle('Popularity Descending');
+        break;
+    }
+  }, [urlParams.sort_by]);
+
+  const [genresList, setGenresList] = useState(null); //Filter list
+  const [activeGenresArray, setActiveGenresArray] = useState([]); //Array of filters
+
+  const [CertificationList, setCertificationList] = useState(null); //Certification list
+  const [activeCertificationsArray, setActiveCertificationsArray] = useState(
+    []
+  ); //Array of certifications
+
+  const [countriesList, setCountriesList] = useState(null); //Countries list
+
+  const [ottRegionsList, setOttRegionsList] = useState(null); //OTT Regions list
+  const [activeOttRegion, setActiveOttRegion] = useState(null); //Active OTT Region
+  const [ottProvidersList, setOttProvidersList] = useState(null); //OTT Providers list
+  const [activeOttProviders, setActiveOttProviders] = useState([]); //Array of active OTT Providers
+
+  const [progress, setProgress] = useState(10); //Progress bar
+
+  const [isAllAvailabilities, setIsAllAvailabilities] = useState(true); //All available
+
+  const toggleAllAvailabilities = () => {
+    setIsAllAvailabilities(!isAllAvailabilities);
+  };
+
+  const [activeAvalabilitiesArray, setActiveAvalabilitiesArray] = useState([
+    'flatrate',
+    'free',
+    'ads',
+    'rent',
+    'buy',
+  ]); //Array of availabilities
+
+  const toggleActiveAvalabilities = (availability) => {
+    if (activeAvalabilitiesArray.includes(availability)) {
+      setActiveAvalabilitiesArray(
+        activeAvalabilitiesArray.filter((item) => item !== availability)
+      );
     } else {
-      if (isChecked.premiere === true) {
-        if (!releaseType.includes(1)) {
-          setReleaseType((prevState) => [...prevState, 1]);
-        }
-      } else {
-        if (releaseType.includes(1)) {
-          setReleaseType(releaseType.filter((item) => item !== 1));
-        }
-      }
-      if (isChecked.theatricalLimited === true) {
-        if (!releaseType.includes(2)) {
-          setReleaseType((prevState) => [...prevState, 2]);
-        }
-      } else {
-        if (releaseType.includes(2)) {
-          setReleaseType(releaseType.filter((item) => item !== 2));
-        }
-      }
-      if (isChecked.theatrical === true) {
-        if (!releaseType.includes(3)) {
-          setReleaseType((prevState) => [...prevState, 3]);
-        }
-      } else {
-        if (releaseType.includes(3)) {
-          setReleaseType(releaseType.filter((item) => item !== 3));
-        }
-      }
-      if (isChecked.digital === true) {
-        if (!releaseType.includes(4)) {
-          setReleaseType((prevState) => [...prevState, 4]);
-        }
-      } else {
-        if (releaseType.includes(4)) {
-          setReleaseType(releaseType.filter((item) => item !== 4));
-        }
-      }
-      if (isChecked.physical === true) {
-        if (!releaseType.includes(5)) {
-          setReleaseType((prevState) => [...prevState, 5]);
-        }
-      } else {
-        if (releaseType.includes(5)) {
-          setReleaseType(releaseType.filter((item) => item !== 5));
-        }
-      }
-      if (isChecked.tv === true) {
-        if (!releaseType.includes(6)) {
-          setReleaseType((prevState) => [...prevState, 6]);
-        }
-      } else {
-        if (releaseType.includes(6)) {
-          setReleaseType(releaseType.filter((item) => item !== 6));
-        }
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isChecked.release,
-    isChecked.premiere,
-    isChecked.theatrical,
-    isChecked.theatricalLimited,
-    isChecked.digital,
-    isChecked.physical,
-    isChecked.tv,
-  ]);
-
-  const filterPanelHandler = (event) => {
-    if (event.target.id === "sort") {
-      setShowSortPanel((prevState) => !prevState);
-    } else if (event.target.id === "filters") {
-      setShowFilterPanel((prevState) => !prevState);
-    } else if (event.target.id === "watch") {
-      setShowWatchPanel((prevState) => !prevState);
+      setActiveAvalabilitiesArray([...activeAvalabilitiesArray, availability]);
     }
   };
 
-  const sortHandler = (e) => {
-    setSortValue(e.target.value);
-  };
+  const [isAllReleases, setIsAllReleases] = useState(true); //All release dates
 
-  const checkBoxHandler = (e) => {
-    const { name } = e.target;
-    setIsChecked((prevState) => ({
-      ...prevState,
-      [name]: !prevState[name],
-    }));
-  };
-
-  const searchCountryHandler = (e) => {
-    setCurrentSearchCountry(e.target.value);
-  };
-
-  const watchCountryHandler = (e) => {
-    setCurrentWatchCountry(e.target.value);
-  };
-
-  const keywordsHandler = (e) => {
-    const { id, classList } = e.target;
-    classList.toggle("keyword-active");
-    if (activeGenreList.includes(id)) {
-      setActiveGenreList(activeGenreList.filter((item) => item !== id));
+  useEffect(() => {
+    if (urlParams.with_release_type !== '') {
+      setIsAllReleases(false);
     } else {
-      setActiveGenreList((prevState) => [...prevState, id]);
+      setIsAllReleases(true);
+    }
+  }, [defaultParams.with_release_type, urlParams.with_release_type]);
+
+  const toggleAllReleaseDates = () => {
+    setIsAllReleases(!isAllReleases);
+  };
+
+  const [activeReleaseTypesArray, setActiveReleaseTypesArray] = useState(
+    urlParams.with_release_type
+      ? urlParams?.with_release_type.split('|')
+      : ['1', '2', '3', '4', '5', '6']
+  ); //Array of release dates
+
+  // activeReleaseTypesArray changes when urlParams.with_release_type changes
+
+  const toggleActiveReleases = (release) => {
+    if (activeReleaseTypesArray.includes(release)) {
+      setActiveReleaseTypesArray(
+        activeReleaseTypesArray.filter((item) => item !== release)
+      );
+    } else {
+      setActiveReleaseTypesArray([...activeReleaseTypesArray, release]);
     }
   };
 
-  // const certificateHandler = (e) => {
-  //   const {id, classList} = e.target;
-  //   classList.toggle("certificate-active");
-  // }
+  const [isAllCountries, setIsAllCountries] = useState(true); //All countries
 
-  const languageHandler = (e) => {
-    setCurrentLanguage(e.target.value);
+  const [languagesList, setLanguagesList] = useState(null); //Languages list
+
+  const toggleAllCountries = () => {
+    setIsAllCountries(!isAllCountries);
   };
 
-  const userScore = [
-    {
-      value: 0,
-      label: "0",
-    },
-    {
-      value: 5,
-      label: "5",
-    },
-    {
-      value: 10,
-      label: "10",
-    },
-  ];
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    setMovies(null);
+    setHasMore(false);
+    setTotalPages(null);
 
-  const minimumUserVote = [
-    {
-      value: 0,
-      label: "0",
-    },
-    {
-      value: 100,
-      label: "100",
-    },
-    {
-      value: 200,
-      label: "200",
-    },
-    {
-      value: 300,
-      label: "300",
-    },
-    {
-      value: 400,
-      label: "400",
-    },
-    {
-      value: 500,
-      label: "500",
-    },
-  ];
+    fetch(discoverUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setMovies(data.results);
+        setTotalPages(data.total_pages);
+        setLoading(false);
+        setProgress(100);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }, [urlParams.page, showType, categoryType, discoverUrl]);
 
-  const runtimeUserMarks = [
-    {
-      value: 0,
-      label: "0",
-    },
-    {
-      value: 120,
-      label: "120",
-    },
-    {
-      value: 240,
-      label: "240",
-    },
-    {
-      value: 360,
-      label: "360",
-    },
-  ];
+  useEffect(() => {
+    const fetchFilter = async () => {
+      try {
+        const filterResponse = await fetch(
+          `${API_URL}/genre/${
+            showType === 'tv' ? 'tv/' : 'movie/'
+          }list?api_key=${API}&language=en-US`
+        );
+        const data = await filterResponse.json();
+        setGenresList(data.genres);
+      } catch (error) {
+        setError(error);
+      }
+    };
+    fetchFilter();
+  }, [showType]); //Fetch filter list when show type changes
+
+  useEffect(() => {
+    const fetchOttProviders = async () => {
+      try {
+        const ottProvidersResponse = await fetch(
+          `${API_URL}/watch/providers/movie?api_key=${API}&language=en-US&watch_region=${urlParams.ott_region}`
+        );
+        const data = await ottProvidersResponse.json();
+        setOttProvidersList(data.results);
+      } catch (error) {
+        setError(error);
+      }
+    };
+    fetchOttProviders();
+  }, [urlParams.ott_region]); //Fetch filter list when show type changes
+
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const languagesResponse = await fetch(
+          `${API_URL}/configuration/languages?api_key=${API}`
+        );
+        const data = await languagesResponse.json();
+        setLanguagesList(
+          data.sort((a, b) => {
+            if (a.english_name < b.english_name) return -1;
+            if (a.english_name > b.english_name) return 1;
+            return 0;
+          })
+        );
+      } catch (error) {
+        setError(error);
+      }
+    };
+    fetchLanguages();
+
+    const fetchCountries = async () => {
+      try {
+        const countriesResponse = await fetch(
+          `${API_URL}/configuration/countries?api_key=${API}`
+        );
+        const data = await countriesResponse.json();
+        setCountriesList(
+          data.sort((a, b) => {
+            if (a.english_name < b.english_name) return -1;
+            if (a.english_name > b.english_name) return 1;
+            return 0;
+          })
+        );
+      } catch (error) {
+        setError(error);
+      }
+    };
+    fetchCountries();
+
+    const fetchOttRegions = async () => {
+      try {
+        const ottRegionsResponse = await fetch(
+          `${API_URL}/watch/providers/regions?api_key=${API}`
+        );
+        const data = await ottRegionsResponse.json();
+        setOttRegionsList(
+          data.results.sort((a, b) => {
+            if (a.english_name < b.english_name) return -1;
+            if (a.english_name > b.english_name) return 1;
+            return 0;
+          })
+        );
+      } catch (error) {
+        setError(error);
+      }
+    };
+    fetchOttRegions();
+
+    const fetchCertification = async () => {
+      try {
+        const certificationResponse = await fetch(
+          `${API_URL}/certification/movie/list?api_key=${API}&language=en-US`
+        );
+        const data = await certificationResponse.json();
+        setCertificationList(data.certifications.IN);
+      } catch (error) {
+        setError(error);
+      }
+    };
+    fetchCertification();
+  }, []); //Fetch countries and certification list
+
+  useEffect(() => {
+    setUrlParams({
+      ...urlParams,
+      with_ott_monetization_types:
+        activeAvalabilitiesArray.length > 0 &&
+        activeAvalabilitiesArray.join('%7C'),
+    });
+  }, [activeAvalabilitiesArray]);
+
+  useEffect(() => {
+    setUrlParams({
+      ...urlParams,
+      with_ott_providers:
+        activeOttProviders.length > 0 && activeOttProviders.join('%7C'),
+    });
+  }, [activeOttProviders]);
+
+  useEffect(() => {
+    setActiveOttProviders([]);
+    setUrlParams({
+      ...urlParams,
+      with_ott_providers: '',
+    });
+  }, [urlParams.ott_region]);
+
+  useEffect(() => {
+    setUrlParams({
+      ...urlParams,
+      certification:
+        activeCertificationsArray.length > 0 &&
+        activeCertificationsArray.join('%7C'),
+    });
+  }, [activeCertificationsArray]);
+
+  useEffect(() => {
+    setUrlParams({
+      ...urlParams,
+      with_genres:
+        activeGenresArray.length > 0 && activeGenresArray.join('%2C'),
+    });
+  }, [activeGenresArray]);
+
+  useEffect(() => {
+    setUrlParams({
+      ...urlParams,
+      with_release_type:
+        activeReleaseTypesArray.length > 0 &&
+        activeReleaseTypesArray.join('%7C'),
+    });
+  }, [activeReleaseTypesArray]);
+
+  const fetchMoreMovies = () => {
+    setLoading(true);
+    setError(null);
+    setUrlParams({
+      ...urlParams,
+      page: urlParams.page + 1,
+    });
+    setDiscoverUrl(generateUrl(urlParams));
+
+    fetch(discoverUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        setMovies([...movies, ...data.results]);
+        setTotalPages(data.total_pages);
+        setHasMore(data.total_pages > urlParams.page);
+        setLoading(false);
+        setProgress(100);
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }; //Fetch more movies
+
+  const handleSearch = () => {
+    const url = generateUrl(urlParams, showType);
+    setDiscoverUrl(url);
+  };
+
+  const toggleFilter = (filter) => {
+    if (activeGenresArray.includes(filter)) {
+      setActiveGenresArray(activeGenresArray.filter((item) => item !== filter));
+    } else {
+      setActiveGenresArray([...activeGenresArray, filter]);
+    }
+  };
+
+  const toggleCertification = (certification) => {
+    if (activeCertificationsArray.includes(certification)) {
+      setActiveCertificationsArray(
+        activeCertificationsArray.filter((item) => item !== certification)
+      );
+    } else {
+      setActiveCertificationsArray([
+        ...activeCertificationsArray,
+        certification,
+      ]);
+    }
+  };
+
+  const toggleOttProviders = (providerId) => {
+    if (activeOttProviders.includes(providerId)) {
+      setActiveOttProviders(
+        activeOttProviders.filter((item) => item !== providerId)
+      );
+    } else {
+      setActiveOttProviders([...activeOttProviders, providerId]);
+    }
+  };
+
+  // function to get nearest next value which is multiple of 4
+  // eg. if value is 5, it will return 8
+
+  const getNearestNextMultipleOfFour = (value) => {
+    let nearestNextMultipleOfFour = value;
+    if (value % 4 !== 0) {
+      nearestNextMultipleOfFour = value + ((4 - (value % 4)) % 4); // if value is 5, it will return 8
+    }
+    return nearestNextMultipleOfFour;
+  };
 
   return (
-    <div className="category-wrapper container d-flex my-4 flex-column ">
-      <div className="category-title mt-2">
-        <h2>
-          {params.category.toUpperCase()} {params.isMovie.toUpperCase()}
-        </h2>
-      </div>
-      <div className="d-flex mt-2 category-responsive">
-        <div className="left-category-section w-20 ">
-          <div className="filter-section">
-            <div className="filter-panel">
-              <div
-                className="filter-name d-flex align-self-center w-100 justify-content-between flex-nowrap "
-                id="sort"
-                onClick={(e) => filterPanelHandler(e)}
-              >
-                <h2 id="sort">Sort</h2>
-                <span
-                  id="sort"
-                  className={"chevron-right " + (showSortPanel ? "rotate" : "")}
-                ></span>
+    <>
+      <LoadingBar
+        color='#01b4e4'
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+        shadow={true}
+        height={4}
+        transitionTime={400}
+      />
+      <section className='content container'>
+        <div className='media'>
+          <div className='column d-flex align-items-start w-100 justify-content-center align-content-start'>
+            <div className='content_wrapper d-flex align-items-start align-content-start flex-wrap'>
+              <div className='title row w-100'>
+                <h2 className='w-100 m-0 p-0 fw-bold'>Popular Movies</h2>
               </div>
-
-              <div
-                className={
-                  "filter " + (showSortPanel ? "height-100" : "height-0")
-                }
-              >
-                <div className="sort-section">
-                  <h3>Sort Results By</h3>
-                  <span>
-                    <select
-                      id="sort_by"
-                      name="sort_by"
-                      className="filter-dropdown w-100"
-                      onChange={(e) => sortHandler(e)}
+              <div className='content d-flex align-items-start w-100'>
+                <div className='filter-section'>
+                  <SortSectionAccordian
+                    urlParams={urlParams}
+                    setUrlParams={setUrlParams}
+                    dropdownTitle={dropdownTitle}
+                  ></SortSectionAccordian>
+                  <FilterSectionAccordian
+                    showType={showType}
+                    urlParams={urlParams}
+                    setUrlParams={setUrlParams}
+                    genresList={genresList}
+                    activeGenresArray={activeGenresArray}
+                    CertificationList={CertificationList}
+                    activeCertificationsArray={activeCertificationsArray}
+                    countriesList={countriesList}
+                    isAllAvailabilities={isAllAvailabilities}
+                    toggleAllAvailabilities={toggleAllAvailabilities}
+                    activeAvalabilitiesArray={activeAvalabilitiesArray}
+                    toggleActiveAvalabilities={toggleActiveAvalabilities}
+                    isAllReleases={isAllReleases}
+                    toggleAllReleaseDates={toggleAllReleaseDates}
+                    activeReleaseTypesArray={activeReleaseTypesArray}
+                    toggleActiveReleases={toggleActiveReleases}
+                    isAllCountries={isAllCountries}
+                    languagesList={languagesList}
+                    toggleAllCountries={toggleAllCountries}
+                    toggleFilter={toggleFilter}
+                    toggleCertification={toggleCertification}
+                  ></FilterSectionAccordian>
+                  <div className='filter-section_wrapper'>
+                    <Accordion
+                      style={{
+                        width: '100%',
+                      }}
                     >
-                      <option value="popularity.desc">
-                        Popularity Descending
-                      </option>
-                      <option value="popularity.asc">
-                        Popularity Ascending
-                      </option>
-                      <option value="vote_average.desc">
-                        Rating Descending
-                      </option>
-                      <option value="vote_average.asc">Rating Ascending</option>
-                      <option value="primary_release_date.desc">
-                        Release Date Descending
-                      </option>
-                      <option value="primary_release_date.asc">
-                        Release Date Ascending
-                      </option>
-                      <option value="original_title.asc">Title (A-Z)</option>
-                      <option value="original_title.desc">Title (Z-A)</option>
-                    </select>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="filter-panel my-3">
-              <div
-                className="filter-name d-flex align-self-center w-100 justify-content-between flex-nowrap"
-                id="filters"
-                onClick={(e) => filterPanelHandler(e)}
-              >
-                <h2 id="filters">Filters</h2>
-                <span
-                  id="filters"
-                  className={
-                    "chevron-right " + (showFilterPanel ? "rotate" : "")
-                  }
-                ></span>
-              </div>
-
-              <div
-                className={
-                  "filter " + (showFilterPanel ? "height-100" : "height-0")
-                }
-              >
-                <div className="show-me-section">
-                  <h3>Show Me</h3>
-                  <label className="w-100 d-inline-flex align-items-center">
-                    <input
-                      id="all_availabilities"
-                      type="checkbox"
-                      className="checkbox-input round-checkbox-input me-1"
-                      name="all_availabilities"
-                      disabled
-                      defaultChecked={true}
-                    />
-                    <label
-                      htmlFor="all_availabilities"
-                      className="all_availabilities"
-                    >
-                      Everything
-                    </label>
-                  </label>
-                  <label className="w-100 d-inline-flex align-items-center">
-                    <input
-                      id="all_availabilities"
-                      type="checkbox"
-                      className="checkbox-input round-checkbox-input me-1"
-                      name="all_availabilities"
-                      disabled
-                    />
-                    <label
-                      htmlFor="all_availabilities"
-                      className="all_availabilities disabled-checkbox"
-                    >
-                      Movies I Haven't Seen
-                    </label>
-                  </label>
-                  <label className="w-100 d-inline-flex align-items-center">
-                    <input
-                      id="all_availabilities"
-                      type="checkbox"
-                      className="checkbox-input round-checkbox-input me-1"
-                      name="all_availabilities"
-                      disabled
-                    />
-                    <label
-                      htmlFor="all_availabilities"
-                      className="all_availabilities disabled-checkbox"
-                    >
-                      Movies I Have Seen
-                    </label>
-                  </label>
-                </div>
-                <div className="availabilities-section">
-                  <h3>Availabilities</h3>
-
-                  <label className="w-100 d-inline-flex align-items-center">
-                    <input
-                      id="all_availabilities"
-                      type="checkbox"
-                      className="checkbox-input me-1"
-                      name="all_availabilities"
-                      onChange={checkBoxHandler}
-                      checked={isChecked.all_availabilities}
-                    />
-                    <label
-                      htmlFor="all_availabilities"
-                      className="all_availabilities"
-                    >
-                      Search all availabilities?
-                    </label>
-                  </label>
-
-                  <div
-                    className={
-                      "availabilities-hidden-section " +
-                      (isChecked.all_availabilities ? "d-none" : "")
-                    }
-                  >
-                    <label className="w-100 d-inline-flex align-items-center">
-                      <input
-                        id="stream"
-                        type="checkbox"
-                        className="checkbox-input me-1"
-                        name="stream"
-                        onChange={(e) => checkBoxHandler(e)}
-                        checked={isChecked.stream}
-                      />
-                      <label htmlFor="stream" className="stream">
-                        Stream
-                      </label>
-                    </label>
-                    <label className="w-100 d-inline-flex align-items-center">
-                      <input
-                        id="free"
-                        type="checkbox"
-                        className="checkbox-input me-1"
-                        name="free"
-                        onChange={(e) => checkBoxHandler(e)}
-                        checked={isChecked.free}
-                      />
-                      <label htmlFor="free" className="free">
-                        Free
-                      </label>
-                    </label>
-                    <label className="w-100 d-inline-flex align-items-center">
-                      <input
-                        id="ads"
-                        type="checkbox"
-                        className="checkbox-input me-1"
-                        name="ads"
-                        onChange={(e) => checkBoxHandler(e)}
-                        checked={isChecked.ads}
-                      />
-                      <label htmlFor="ads" className="ads">
-                        Ads
-                      </label>
-                    </label>
-                    <label className="w-100 d-inline-flex align-items-center">
-                      <input
-                        id="rent"
-                        type="checkbox"
-                        className="checkbox-input me-1"
-                        name="rent"
-                        onChange={(e) => checkBoxHandler(e)}
-                        checked={isChecked.rent}
-                      />
-                      <label htmlFor="rent" className="rent">
-                        Rent
-                      </label>
-                    </label>
-                    <label className="w-100 d-inline-flex align-items-center">
-                      <input
-                        id="buy"
-                        type="checkbox"
-                        className="checkbox-input me-1"
-                        name="buy"
-                        onChange={(e) => checkBoxHandler(e)}
-                        checked={isChecked.buy}
-                      />
-                      <label htmlFor="buy" className="buy">
-                        Buy
-                      </label>
-                    </label>
-                  </div>
-                </div>
-
-                <div className="release-section">
-                  <h3>Release Dates</h3>
-
-                  <label className="w-100 d-inline-flex align-items-center">
-                    <input
-                      id="release"
-                      type="checkbox"
-                      className="checkbox-input me-1"
-                      name="release"
-                      checked={isChecked.release}
-                      onChange={(e) => checkBoxHandler(e)}
-                    />
-                    <label htmlFor="release" className="release-checkbox">
-                      Search all releases?
-                    </label>
-                  </label>
-
-                  <div
-                    className={
-                      "releases-hidden-section " +
-                      (isChecked.release ? "d-none" : "")
-                    }
-                  >
-                    <div className="release-country-section">
-                      <label className="w-100 d-inline-flex align-items-center">
-                        <input
-                          id="countries"
-                          type="checkbox"
-                          className="checkbox-input me-1"
-                          name="countries"
-                          checked={isChecked.countries}
-                          onChange={(e) => checkBoxHandler(e)}
-                        />
-                        <label htmlFor="countries" className="countries">
-                          Search all countries?
-                        </label>
-                      </label>
-
-                      <div
-                        className={
-                          "countries-input-section py-2 " +
-                          (isChecked.countries ? "d-none" : "")
-                        }
-                      >
-                        <span>
-                          <select
-                            id="searchCountries"
-                            name="searchCountries"
-                            className="filter-dropdown w-100"
-                            onChange={(e) => searchCountryHandler(e)}
-                            value={currentSearchCountry}
+                      <Accordion.Item eventKey='0'>
+                        <Accordion.Header>Where To Watch</Accordion.Header>
+                        <Accordion.Body className='ott-provider-filter'>
+                          <h3
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              width: '100%',
+                              fontSize: '1em',
+                              fontWeight: '300',
+                              marginBottom: '10px',
+                              color: '#000',
+                            }}
+                            className='filter-title p-0'
                           >
-                            {Country.map((currentLanguage) => {
-                              return (
-                                <option
-                                  key={currentLanguage.iso_3166_1}
-                                  value={currentLanguage.iso_3166_1}
+                            Country
+                          </h3>
+                          {ottRegionsList && (
+                            <Form>
+                              <Dropdown
+                                onSelect={(eventKey) => {
+                                  setUrlParams({
+                                    ...urlParams,
+                                    ott_region: eventKey,
+                                  });
+                                }}
+                              >
+                                <Dropdown.Toggle
+                                  variant='secondary'
+                                  id='dropdown-basic'
                                 >
-                                  {currentLanguage.english_name}{" "}
-                                </option>
-                              );
-                            })}
-                          </select>
-                        </span>
-                      </div>
-                    </div>
-                    <div className="watch-provider-section">
-                      <label className="w-100 d-inline-flex align-items-center">
-                        <input
-                          id="premiere"
-                          type="checkbox"
-                          className="checkbox-input me-1"
-                          name="premiere"
-                          checked={isChecked.premiere}
-                          onChange={(e) => checkBoxHandler(e)}
-                        />
-                        <label htmlFor="premiere" className="premiere">
-                          Premiere
-                        </label>
-                      </label>
-                      <label className="w-100 d-inline-flex align-items-center">
-                        <input
-                          id="theatrical-limited"
-                          type="checkbox"
-                          className="checkbox-input me-1"
-                          name="theatricalLimited"
-                          checked={isChecked.theatricalLimited}
-                          onChange={(e) => checkBoxHandler(e)}
-                        />
-                        <label
-                          htmlFor="theatrical-limited"
-                          className="theatrical-limited"
-                        >
-                          Theatrical (limited)
-                        </label>
-                      </label>
-                      <label className="w-100 d-inline-flex align-items-center">
-                        <input
-                          id="theatrical"
-                          type="checkbox"
-                          className="checkbox-input me-1"
-                          name="theatrical"
-                          checked={isChecked.theatrical}
-                          onChange={(e) => checkBoxHandler(e)}
-                        />
-                        <label htmlFor="theatrical" className="theatrical">
-                          Theatrical
-                        </label>
-                      </label>
-                      <label className="w-100 d-inline-flex align-items-center">
-                        <input
-                          id="digital"
-                          type="checkbox"
-                          className="checkbox-input me-1"
-                          name="digital"
-                          checked={isChecked.digital}
-                          onChange={(e) => checkBoxHandler(e)}
-                        />
-                        <label htmlFor="digital" className="digital">
-                          Digital
-                        </label>
-                      </label>
-                      <label className="w-100 d-inline-flex align-items-center">
-                        <input
-                          id="physical"
-                          type="checkbox"
-                          className="checkbox-input me-1"
-                          name="physical"
-                          checked={isChecked.physical}
-                          onChange={(e) => checkBoxHandler(e)}
-                        />
-                        <label htmlFor="physical" className="physical">
-                          Physical
-                        </label>
-                      </label>
-                      <label className=" d-inline-flex align-items-center">
-                        <input
-                          id="tv"
-                          type="checkbox"
-                          className="checkbox-input me-1"
-                          name="tv"
-                          checked={isChecked.tv}
-                          onChange={(e) => checkBoxHandler(e)}
-                        />
-                        <label htmlFor="tv" className="tv">
-                          TV
-                        </label>
-                      </label>
-                    </div>
+                                  <span>
+                                    {urlParams.ott_region && (
+                                      <img
+                                        // src={`https://flagcdn.com/w20/${urlParams.ott_region.toLowerCase()}.png`}
+                                        src={`https://raw.githubusercontent.com/SujalShah3234/All-Country-Flags/master/${urlParams.ott_region}.png`}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src =
+                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8wkWFOYkdG7W9Xf0-aheuTMQHTEsySnpXOQ&usqp=CAU';
+                                        }}
+                                        style={{
+                                          width: '24px',
+                                          height: '20px',
+                                          marginRight: '10px',
+                                        }}
+                                        alt={urlParams.ott_region}
+                                      />
+                                    )}
+                                    {urlParams.ott_region
+                                      ? ottRegionsList.find(
+                                          (country) =>
+                                            country.iso_3166_1 ===
+                                            urlParams.ott_region
+                                        ).native_name
+                                      : 'Select Country'}
+                                  </span>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                  {ottRegionsList.map((country) => (
+                                    <Dropdown.Item
+                                      key={country.iso_3166_1}
+                                      eventKey={country.iso_3166_1}
+                                    >
+                                      <img
+                                        src={`https://raw.githubusercontent.com/SujalShah3234/All-Country-Flags/master/${country.iso_3166_1}.png`}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src =
+                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8wkWFOYkdG7W9Xf0-aheuTMQHTEsySnpXOQ&usqp=CAU';
+                                        }}
+                                        style={{
+                                          width: '24px',
+                                          height: '20px',
+                                          marginRight: '10px',
+                                        }}
+                                        alt={country.iso_3166_1}
+                                      />
+                                      {country.native_name}
+                                    </Dropdown.Item>
+                                  ))}
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Form>
+                          )}
+                          <span className='ott_provider_wrapper'>
+                            <ul className='ott_providers'>
+                              {ottProvidersList &&
+                                ottProvidersList.map((provider, index) => (
+                                  <OverlayTrigger
+                                    key={index}
+                                    placement='top'
+                                    overlay={
+                                      <Tooltip id={`tooltip`}>
+                                        {provider.provider_name}
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <li
+                                      key={provider.provider_id}
+                                      onClick={() =>
+                                        toggleOttProviders(provider.provider_id)
+                                      }
+                                      data-bs-toggle='tooltip'
+                                      data-bs-placement='top'
+                                      data-original-title={
+                                        provider.provider_name
+                                      }
+                                    >
+                                      <span>
+                                        <img
+                                          src={`https://www.themoviedb.org/t/p/original${provider.logo_path}`}
+                                          width='50'
+                                          height='50'
+                                          alt={provider.name}
+                                        />
+                                        <div
+                                          className={
+                                            activeOttProviders.includes(
+                                              provider.provider_id
+                                            )
+                                              ? 'ott_provider_checkbox_wrapper active'
+                                              : 'ott_provider_checkbox_wrapper'
+                                          }
+                                        >
+                                          <span className='check-icon'></span>
+                                        </div>
+                                      </span>
+                                    </li>
+                                  </OverlayTrigger>
+                                ))}
+                            </ul>
+                          </span>
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    </Accordion>
                   </div>
-
-                  <div className="date-picker-section">
-                    <div className="from-section d-flex justify-content-between">
-                      <div className="w-5">
-                        <span>from</span>
-                      </div>
-
-                      <div className="date-picker-container d-flex justify-content-end">
-                        <DatePicker
-                          selected={fromDate}
-                          onChange={(date) => setFromDate(date)}
-                        />
-                        {/* <span className="datepicker-cal"><img src={cal} alt="" /></span> */}
-                      </div>
-                    </div>
-                    <div className="to-section d-flex justify-content-between mt-2">
-                      <div className="w-5">
-                        <span>to</span>
-                      </div>
-                      <div className="date-picker-container d-flex justify-content-end">
-                        <DatePicker
-                          selected={toDate}
-                          onChange={(date) => setToDate(date)}
-                        />
-                        {/* <span className="datepicker-cal"><img src={cal} alt="" /></span> */}
-                      </div>
-                    </div>
+                  <div className='search-btn' onClick={handleSearch}>
+                    Search
                   </div>
                 </div>
-
-                <div className="genre-section">
-                  <h3>Genres</h3>
-
-                  <div className="keyword-wrapper">
-                    <ul>
-                      {genreList.map((keyword) => {
-                        return (
-                          <li
-                            key={keyword.id}
-                            id={keyword.id}
-                            onClick={(e) => keywordsHandler(e)}
+                <div className='movies-section'>
+                  <div className='wrapper'>
+                    <section className='pannel'>
+                      <div className='media_items'>
+                        {loading && (
+                          <div className='loader'>
+                            <img
+                              src={require('../../assets/loader.gif')}
+                              alt='loader'
+                            />
+                          </div>
+                        )}
+                        {movies && (
+                          <InfiniteScroll
+                            dataLength={movies.length}
+                            next={() => {
+                              setProgress(50);
+                              fetchMoreMovies();
+                            }}
+                            hasMore={hasMore}
+                            loader={
+                              <div className='loader'>
+                                <img
+                                  src={require('../../assets/loader.gif')}
+                                  alt='loader'
+                                />
+                              </div>
+                            }
                           >
-                            {keyword.name}
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </div>
-{/* 
-                <div className="certificate-section">
-                  <h3>Certification</h3>
-                  <div className="certificate-wrapper">
-                    <ul>
-                      <li>U</li>
-                      <li>UA</li>
-                      <li>A</li>
-                    </ul>
-                  </div>
-                </div> */}
+                            <div className='page_1'>
+                              {movies ? (
+                                movies.map((movie, index) => (
+                                  <FilterMovieCard
+                                    key={index}
+                                    id={movie.id}
+                                    poster={movie.poster_path}
+                                    title={movie.name ?? movie.title}
+                                    date={
+                                      movie.first_air_date ?? movie.release_date
+                                    }
+                                    rating={movie.vote_average * 10}
+                                    showType={showType}
+                                    movie={movie}
+                                  />
+                                ))
+                              ) : (
+                                <div>
+                                  No items were found that match your query.
+                                </div>
+                              )}
+                            </div>
+                          </InfiniteScroll>
+                        )}
 
-                <div className="language-section">
-                  <h3>Language</h3>
-                  <div className="language-wrapper">
-                    <span>
-                      <select
-                        id="languages"
-                        name="languages"
-                        className="filter-dropdown w-100"
-                        onChange={(e) => languageHandler(e)}
-                        value={currentLanguage}
-                      >
-                        {Language.map((currentLanguage) => {
-                          return (
-                            <option
-                              key={currentLanguage.iso_639_1}
-                              value={currentLanguage.iso_639_1}
+                        {urlParams.page !== totalPages && !loading && (
+                          <div className='load_more'>
+                            <Link
+                              to=''
+                              onClick={() => {
+                                setHasMore(true);
+                                fetchMoreMovies();
+                                setProgress(50);
+                              }}
                             >
-                              {currentLanguage.english_name}{" "}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </span>
+                              Load More
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    </section>
                   </div>
                 </div>
-
-                <div className="user-score-section">
-                  <h3>User Score</h3>
-
-                  <Slider
-                    value={userScoreValue}
-                    onChange={(event, newValue) => {
-                      setUserScoreValue(newValue);
-                    }}
-                    min={0}
-                    max={10}
-                    step={1}
-                    marks={userScore}
-                    valueLabelDisplay="auto"
-                  />
-                </div>
-
-                <div className="votes-section">
-                  <h3>Minimum User Score</h3>
-
-                  <Slider
-                    aria-label="Always visible"
-                    defaultValue={10}
-                    valueLabelDisplay="auto"
-                    min={0}
-                    max={500}
-                    step={50}
-                    marks={minimumUserVote}
-                    getAriaValueText={(value) => `${value}m`}
-                    onChange={(e) => setMinimumUserVotes(e.target.value)}
-                  />
-                </div>
-                <div className="runtime-section">
-                  <h3>Runtime</h3>
-
-                  <Slider
-                    value={runtimeUser}
-                    onChange={(event, newValue) => {
-                      setRuntimeUser(newValue);
-                    }}
-                    min={0}
-                    max={400}
-                    step={15}
-                    marks={runtimeUserMarks}
-                    valueLabelDisplay="auto"
-                  />
-                </div>
               </div>
-            </div>
-            <div className="filter-panel">
-              <div
-                className="filter-name d-flex align-self-center w-100 justify-content-between flex-nowrap"
-                id="watch"
-                onClick={(e) => filterPanelHandler(e)}
-              >
-                <h2 id="watch">Where to Watch</h2>
-                <span
-                  id="watch"
-                  className={
-                    "chevron-right " + (showWatchPanel ? "rotate" : "")
-                  }
-                ></span>
-              </div>
-
-              <div
-                className={
-                  "filter " + (showWatchPanel ? "height-100" : "height-0")
-                }
-              >
-                <div className="country-section">
-                  <span>
-                    <select
-                      id="country"
-                      name="countries"
-                      className="filter-dropdown w-100"
-                      onChange={(e) => watchCountryHandler(e)}
-                      value={currentWatchCountry}
-                    >
-                      {Country.map((currentLanguage) => {
-                        return (
-                          <option
-                            key={currentLanguage.iso_3166_1}
-                            value={currentLanguage.iso_3166_1}
-                          >
-                            {currentLanguage.english_name}{" "}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </span>
-
-                  <CategoryWatchProvider
-                    currentWatchCountry={currentWatchCountry}
-                    activeCategoryWatchProvider={activeCategoryWatchProvider}
-                    setActiveCategoryWatchProvider={
-                      setActiveCategoryWatchProvider
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="search-btn-section mt-3">
-              <button
-                className="btn btn-custom w-100"
-                onClick={searchBtnHandler}
-              >
-                Search
-              </button>
             </div>
           </div>
         </div>
-
-        <div className="right-category-section w-80 h-100 mx-auto">
-          {!showSearchSection ? (
-            params.isMovie === "movie" ? (
-              <MovieCategory category={params.category} url={url} />
-            ) : (
-              <TvCategory category={params.category} url={url} />
-            )
-          ) : (
-            <SearchCategory url={url} isMovie={params.isMovie} />
-          )}
-
-          {/* <div className="load-more-btn-section  w-100 m-4">
-            <button className="btn btn-custom btn-load w-100">Load More</button>
-          </div> */}
-        </div>
-      </div>
-    </div>
+      </section>
+    </>
   );
 };
 
-export default CategorySection;
+export default CategoryPage;
+

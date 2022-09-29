@@ -71,8 +71,8 @@ export const GetSearchData = (currentData, query, page) => {
   const searchQueryUrl = `https://api.themoviedb.org/3/search/${currentData}?api_key=${process.env.REACT_APP_API_KEY}&query=${query}&page=${page}`;
   return axios.get(searchQueryUrl);
 };
-export const GetCategoryWatchProvider = (country) => {
-  const categoryWatchProviderURL = `https://api.themoviedb.org/3/watch/providers/movie?api_key=${process.env.REACT_APP_API_KEY}&watch_region=${country}`;
+export const GetCategoryWatchProvider = (currentWatchCountry) => {
+  const categoryWatchProviderURL = `https://api.themoviedb.org/3/watch/providers/movie?api_key=${process.env.REACT_APP_API_KEY}&watch_region=${currentWatchCountry}`;
   return axios.get(categoryWatchProviderURL);
 };
 export const CategoryKeywordURL = () => {

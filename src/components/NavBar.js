@@ -47,22 +47,22 @@ const NavBar = () => {
                       <div className="tv-items ">
                         <ul className="navbar-nav">
                           <li className="nav-item hover-bg">
-                            <Link className="nav-link " to="/movie/popular">
+                            <Link className="nav-link " to="/movie/category/popular">
                               Popular
                             </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <Link className="nav-link " to="/movie/now_playing">
+                            <Link className="nav-link " to="/movie/category/now_playing">
                               Now Playing
                             </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <Link className="nav-link " to="/movie/upcoming">
+                            <Link className="nav-link " to="/movie/category/upcoming">
                               Upcoming
                             </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <Link className="nav-link " to="/movie/top_rated">
+                            <Link className="nav-link " to="/movie/category/top_rated">
                               Top Rated
                             </Link>
                           </li>
@@ -74,22 +74,22 @@ const NavBar = () => {
                       <div className="tv-items ">
                         <ul className="navbar-nav ">
                           <li className="nav-item hover-bg">
-                            <Link className="nav-link  " to="/tv/popular">
+                            <Link className="nav-link  " to="/tv/category/popular">
                               Popular
                             </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <Link className="nav-link  " to="/tv/airing_today">
+                            <Link className="nav-link  " to="/tv/category/airing_today">
                               Airing Today
                             </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <Link className="nav-link  " to="/tv/on_the_air">
+                            <Link className="nav-link  " to="/tv/category/on_the_air">
                               On TV
                             </Link>
                           </li>
                           <li className="nav-item hover-bg">
-                            <Link className="nav-link  " to="/tv/top_rated">
+                            <Link className="nav-link  " to="/tv/category/top_rated">
                               Top Rated
                             </Link>
                           </li>
