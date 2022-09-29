@@ -10,7 +10,8 @@ import CategoryWatchProvider from "./CategoryWatchProvider";
 import TvCategory from "./TvCategory";
 import SearchCategory from "./SearchCategory";
 import Slider from "@mui/material/Slider";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+// import cal from '../../assets/calender.svg'
+
 import { CategoryKeywordURL } from "../../api";
 
 const CategorySection = () => {
@@ -39,8 +40,38 @@ const CategorySection = () => {
   const [minimumUserVotes, setMinimumUserVotes] = useState(0);
   const [runtimeUser, setRuntimeUser] = useState([0, 400]);
   const [currentLanguage, setCurrentLanguage] = useState("en");
+  // const [certificate, setCertificate] = useState(['PG-13']);
+  // const [certificateCountry, setCertificateCountry] = useState("IN");
   const [url, setUrl] = useState("");
   const [showSearchSection, setShowSearchSection] = useState(false);
+
+  const searchBtnHandler = () => {
+    const myCurrentURL = `&sort_by=${sortValue}&release_date.gte=${
+      fromDate ? fromDate.toLocaleDateString("en-CA") : ""
+    }&release_date.lte=${toDate.toLocaleDateString(
+      "en-CA"
+    )}&with_genres=${activeGenreList.join(
+      ","
+    )}&with_watch_monetization_types=${activeCategoryWatchProvider.join(
+      "|"
+    )}&with_release_type=${releaseType.join(
+      "|"
+    )}&with_original_language=${currentLanguage}&vote_average.gte=${
+      userScoreValue[0]
+    }&vote_average.lte=${
+      userScoreValue[1]
+    }&vote_count.gte=${minimumUserVotes}&with_runtime.gte=${
+      runtimeUser[0]
+    }&with_runtime.lte=${
+      runtimeUser[1]
+    }&with_ott_providers=${activeCategoryWatchProvider.join(
+      "|"
+    )}
+`;
+
+    setUrl(myCurrentURL);
+    setShowSearchSection(true);
+  };
 
   const initialState = {
     all_availabilities: true,
@@ -123,7 +154,7 @@ const CategorySection = () => {
 
       console.log(isChecked);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isChecked.all_availabilities,
     isChecked.buy,
@@ -192,7 +223,7 @@ const CategorySection = () => {
         }
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isChecked.release,
     isChecked.premiere,
@@ -202,8 +233,6 @@ const CategorySection = () => {
     isChecked.physical,
     isChecked.tv,
   ]);
-
-
 
   const filterPanelHandler = (event) => {
     if (event.target.id === "sort") {
@@ -245,39 +274,16 @@ const CategorySection = () => {
     }
   };
 
+  // const certificateHandler = (e) => {
+  //   const {id, classList} = e.target;
+  //   classList.toggle("certificate-active");
+  // }
+
   const languageHandler = (e) => {
     setCurrentLanguage(e.target.value);
   };
 
-  const searchBtnHandler = () => {
-    const myCurrentURL = `&sort_by=${sortValue}&release_date.gte=${
-      fromDate ? fromDate.toLocaleDateString("en-CA") : ""
-    }&release_date.lte=${toDate.toLocaleDateString(
-      "en-CA"
-    )}&with_genres=${activeGenreList.join(
-      ","
-    )}&with_watch_monetization_types=${activeCategoryWatchProvider.join(
-      "|"
-    )}&with_release_type=${releaseType.join(
-      "|"
-    )}&with_original_language=${currentLanguage}&vote_average.gte=${
-      userScoreValue[0]
-    }&vote_average.lte=${
-      userScoreValue[1]
-    }&vote_count.gte=${minimumUserVotes}&with_runtime.gte=${
-      runtimeUser[0]
-    }&with_runtime.lte=${
-      runtimeUser[1]
-    }&with_ott_providers=${activeCategoryWatchProvider.join("|")}
-`;
-
-    setUrl(myCurrentURL);
-    setShowSearchSection(true);
-
-  
-  };
-
-  const userScoreMarks = [
+  const userScore = [
     {
       value: 0,
       label: "0",
@@ -292,7 +298,7 @@ const CategorySection = () => {
     },
   ];
 
-  const minimumUserVotesMarks = [
+  const minimumUserVote = [
     {
       value: 0,
       label: "0",
@@ -338,19 +344,11 @@ const CategorySection = () => {
     },
   ];
 
-  const myTheme = createTheme({
-    palette: {
-      primary: {
-        main: "rgb(1, 180, 228)",
-      },
-    },
-  });
-
   return (
     <div className="category-wrapper container d-flex my-4 flex-column ">
       <div className="category-title mt-2">
         <h2>
-          {(params.category).toUpperCase()} {(params.isMovie).toUpperCase()}
+          {params.category.toUpperCase()} {params.isMovie.toUpperCase()}
         </h2>
       </div>
       <div className="d-flex mt-2 category-responsive">
@@ -426,7 +424,7 @@ const CategorySection = () => {
                   "filter " + (showFilterPanel ? "height-100" : "height-0")
                 }
               >
-                 <div className="show-me-section">
+                <div className="show-me-section">
                   <h3>Show Me</h3>
                   <label className="w-100 d-inline-flex align-items-center">
                     <input
@@ -435,6 +433,7 @@ const CategorySection = () => {
                       className="checkbox-input round-checkbox-input me-1"
                       name="all_availabilities"
                       disabled
+                      defaultChecked={true}
                     />
                     <label
                       htmlFor="all_availabilities"
@@ -454,7 +453,6 @@ const CategorySection = () => {
                     <label
                       htmlFor="all_availabilities"
                       className="all_availabilities disabled-checkbox"
-                      
                     >
                       Movies I Haven't Seen
                     </label>
@@ -470,7 +468,6 @@ const CategorySection = () => {
                     <label
                       htmlFor="all_availabilities"
                       className="all_availabilities disabled-checkbox"
-                      
                     >
                       Movies I Have Seen
                     </label>
@@ -705,7 +702,7 @@ const CategorySection = () => {
                           Physical
                         </label>
                       </label>
-                      <label className="w-100 d-inline-flex align-items-center">
+                      <label className=" d-inline-flex align-items-center">
                         <input
                           id="tv"
                           type="checkbox"
@@ -732,6 +729,7 @@ const CategorySection = () => {
                           selected={fromDate}
                           onChange={(date) => setFromDate(date)}
                         />
+                        {/* <span className="datepicker-cal"><img src={cal} alt="" /></span> */}
                       </div>
                     </div>
                     <div className="to-section d-flex justify-content-between mt-2">
@@ -743,6 +741,7 @@ const CategorySection = () => {
                           selected={toDate}
                           onChange={(date) => setToDate(date)}
                         />
+                        {/* <span className="datepicker-cal"><img src={cal} alt="" /></span> */}
                       </div>
                     </div>
                   </div>
@@ -767,7 +766,7 @@ const CategorySection = () => {
                     </ul>
                   </div>
                 </div>
-
+{/* 
                 <div className="certificate-section">
                   <h3>Certification</h3>
                   <div className="certificate-wrapper">
@@ -777,7 +776,7 @@ const CategorySection = () => {
                       <li>A</li>
                     </ul>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="language-section">
                   <h3>Language</h3>
@@ -807,52 +806,49 @@ const CategorySection = () => {
 
                 <div className="user-score-section">
                   <h3>User Score</h3>
-                  <ThemeProvider theme={myTheme}>
-                    <Slider
-                      value={userScoreValue}
-                      onChange={(event, newValue) => {
-                        setUserScoreValue(newValue);
-                      }}
-                      min={0}
-                      max={10}
-                      step={1}
-                      marks={userScoreMarks}
-                      valueLabelDisplay="auto"
-                    />
-                  </ThemeProvider>
+
+                  <Slider
+                    value={userScoreValue}
+                    onChange={(event, newValue) => {
+                      setUserScoreValue(newValue);
+                    }}
+                    min={0}
+                    max={10}
+                    step={1}
+                    marks={userScore}
+                    valueLabelDisplay="auto"
+                  />
                 </div>
 
                 <div className="votes-section">
                   <h3>Minimum User Score</h3>
-                  <ThemeProvider theme={myTheme}>
-                    <Slider
-                      aria-label="Always visible"
-                      defaultValue={10}
-                      valueLabelDisplay="auto"
-                      min={0}
-                      max={500}
-                      step={50}
-                      marks={minimumUserVotesMarks}
-                      getAriaValueText={(value) => `${value}m`}
-                      onChange={(e) => setMinimumUserVotes(e.target.value)}
-                    />
-                  </ThemeProvider>
+
+                  <Slider
+                    aria-label="Always visible"
+                    defaultValue={10}
+                    valueLabelDisplay="auto"
+                    min={0}
+                    max={500}
+                    step={50}
+                    marks={minimumUserVote}
+                    getAriaValueText={(value) => `${value}m`}
+                    onChange={(e) => setMinimumUserVotes(e.target.value)}
+                  />
                 </div>
                 <div className="runtime-section">
                   <h3>Runtime</h3>
-                  <ThemeProvider theme={myTheme}>
-                    <Slider
-                      value={runtimeUser}
-                      onChange={(event, newValue) => {
-                        setRuntimeUser(newValue);
-                      }}
-                      min={0}
-                      max={400}
-                      step={15}
-                      marks={runtimeUserMarks}
-                      valueLabelDisplay="auto"
-                    />
-                  </ThemeProvider>
+
+                  <Slider
+                    value={runtimeUser}
+                    onChange={(event, newValue) => {
+                      setRuntimeUser(newValue);
+                    }}
+                    min={0}
+                    max={400}
+                    step={15}
+                    marks={runtimeUserMarks}
+                    valueLabelDisplay="auto"
+                  />
                 </div>
               </div>
             </div>

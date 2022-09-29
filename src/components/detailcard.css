@@ -1,6 +1,7 @@
 .home-card {
     width: 150px;
     min-width: 150px;
+    height: 325px !important;
     border: none !important;
     background-color: transparent !important;
     box-shadow: none;
@@ -8,6 +9,7 @@
     overflow: visible;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row !important;
     align-content: flex-start;
     position: relative;
     animation: fade-in 2.5s linear 0s alternate !important;
@@ -53,7 +55,7 @@
     height: 38px;
     width: 38px;
     position: absolute;
-    bottom: 107px;
+    bottom: 85px;
     left: 10px;
 }
 
