@@ -1,5 +1,3 @@
-// function that returns object of parameters based on category type
-
 const getInitialParams = (showType, category) => {
     if (showType === 'movie') {
       switch (category) {

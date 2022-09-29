@@ -21,10 +21,10 @@ const FilterMovieCard = ({
   let detailsPath;
   switch (showType) {
     case "tv":
-      detailsPath = `/tv/${id}`;
+      detailsPath = `/tv/detail/${id}`;
       break;
     default:
-      detailsPath = `/movie/${id}`;
+      detailsPath = `/movie/detail/${id}`;
       break;
   }
   const pColor =
@@ -62,28 +62,24 @@ const FilterMovieCard = ({
       </div>
       <div className="card-content w-100">
         <div className="card-content_rankings">
-          <div className="ring">
-            <div className="ring-inner">
-              <div className="percent">
-                <CircularProgressbarWithChildren
-                  value={movie.vote_average *10 }
-                  styles={buildStyles({
-                    pathColor: pColor,
-                    trailColor: tColor,
-                    backgroundColor: "#032b48",
-                  })}
-                >
-                  <div className="progress_bar_data">
-                    <span>
-                      {movie.vote_average > 0 ? movie.vote_average * 10 : "NR"}
-                    </span>
-                    <sup className="sup_class">
-                      {movie.vote_average > 0 ? "%" : ""}
-                    </sup>
-                  </div>
-                </CircularProgressbarWithChildren>
+          <div className="percent">
+            <CircularProgressbarWithChildren
+              value={movie.vote_average * 10}
+              styles={buildStyles({
+                pathColor: pColor,
+                trailColor: tColor,
+                backgroundColor: "#032b48",
+              })}
+            >
+              <div className="progress_bar_data">
+                <span>
+                  {movie.vote_average > 0 ? movie.vote_average * 10 : "NR"}
+                </span>
+                <sup className="sup_class">
+                  {movie.vote_average > 0 ? "%" : ""}
+                </sup>
               </div>
-            </div>
+            </CircularProgressbarWithChildren>
           </div>
         </div>
         <h2 className="m-0">

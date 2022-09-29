@@ -1,36 +1,30 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import {
   Dropdown,
   Accordion,
   OverlayTrigger,
   Tooltip,
   Form,
-} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import LoadingBar from 'react-top-loading-bar';
-
-import { API, API_URL } from '../../Constants';
-import FilterMovieCard from './FilterMovieCard';
-
-import 'react-datepicker/dist/react-datepicker.css';
-import './maincategory.css';
-
-import getInitialParams from './Params';
-
-import SortSectionAccordian from './SortSection';
-import FilterSectionAccordian from './FilterSection';
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import LoadingBar from "react-top-loading-bar";
+import { API, API_URL } from "../../Constants";
+import FilterMovieCard from "./FilterMovieCard";
+import "react-datepicker/dist/react-datepicker.css";
+import "./maincategory.css";
+import getInitialParams from "./Params";
+import SortSectionAccordian from "./SortSection";
+import FilterSectionAccordian from "./FilterSection";
 
 const CategoryPage = () => {
-  const { showType, categoryType } = useParams(); // Get params from url
+  const { showType, categoryType } = useParams();
 
-  // Default Parameters when categoryType changed
   const [defaultParams, setDefaultParams] = useState(
     getInitialParams(showType, categoryType)
   );
 
-  // Parameters when filter changes
   const [urlParams, setUrlParams] = useState(
     getInitialParams(showType, categoryType)
   );
@@ -40,7 +34,7 @@ const CategoryPage = () => {
     setDefaultParams(getInitialParams(showType, categoryType));
   }, [showType, categoryType]);
 
-  const [movies, setMovies] = useState(null); //Array of movies
+  const [movies, setMovies] = useState(null);
 
   const generateUrl = useCallback(
     (params) => {
@@ -61,78 +55,74 @@ const CategoryPage = () => {
     setDiscoverUrl(generateUrl(defaultParams));
   }, [defaultParams, generateUrl]);
 
-  //Fetch movies based on type
-  const [loading, setLoading] = useState(true); //Loading
-  const [error, setError] = useState(null); //Error handling
+  const [loading, setLoading] = useState(true);
+  const [, setError] = useState(null);
 
-  const [hasMore, setHasMore] = useState(false); //Infinite scroll
-  const [totalPages, setTotalPages] = useState(null); //total pages of movies
+  const [hasMore, setHasMore] = useState(false);
+  const [totalPages, setTotalPages] = useState(null);
 
-  const [dropdownTitle, setDropdownTitle] = useState('Popularity Descending'); //Dropdown title
+  const [dropdownTitle, setDropdownTitle] = useState("Popularity Descending");
 
   useEffect(() => {
     switch (urlParams.sort_by) {
-      case 'popularity.desc':
-        setDropdownTitle('Popularity Descending');
+      case "popularity.desc":
+        setDropdownTitle("Popularity Descending");
         break;
-      case 'popularity.asc':
-        setDropdownTitle('Popularity Ascending');
+      case "popularity.asc":
+        setDropdownTitle("Popularity Ascending");
         break;
-      case 'vote_average.desc':
-        setDropdownTitle('Rating Descending');
+      case "vote_average.desc":
+        setDropdownTitle("Rating Descending");
         break;
-      case 'vote_average.asc':
-        setDropdownTitle('Rating Ascending');
+      case "vote_average.asc":
+        setDropdownTitle("Rating Ascending");
         break;
-      case 'primary_release_date.desc':
-        setDropdownTitle('Release Date Descending');
+      case "primary_release_date.desc":
+        setDropdownTitle("Release Date Descending");
         break;
-      case 'primary_release_date.asc':
-        setDropdownTitle('Release Date Ascending');
+      case "primary_release_date.asc":
+        setDropdownTitle("Release Date Ascending");
         break;
-      case 'title.asc':
-        setDropdownTitle('Title (A-Z)');
+      case "title.asc":
+        setDropdownTitle("Title (A-Z)");
         break;
-      case 'title.desc':
-        setDropdownTitle('Title (Z-A)');
+      case "title.desc":
+        setDropdownTitle("Title (Z-A)");
         break;
       default:
-        setDropdownTitle('Popularity Descending');
+        setDropdownTitle("Popularity Descending");
         break;
     }
   }, [urlParams.sort_by]);
 
-  const [genresList, setGenresList] = useState(null); //Filter list
-  const [activeGenresArray, setActiveGenresArray] = useState([]); //Array of filters
-
-  const [CertificationList, setCertificationList] = useState(null); //Certification list
+  const [genresList, setGenresList] = useState(null);
+  const [activeGenresArray, setActiveGenresArray] = useState([]);
+  const [CertificationList, setCertificationList] = useState(null);
   const [activeCertificationsArray, setActiveCertificationsArray] = useState(
     []
-  ); //Array of certifications
+  );
+  const [countriesList, setCountriesList] = useState(null);
+  const [ottRegionsList, setOttRegionsList] = useState(null);
+  const [ottProvidersList, setOttProvidersList] = useState(null);
+  const [activeOttProviders, setActiveOttProviders] = useState([]);
+  const [progress, setProgress] = useState(10);
+  const [isAllAvailabilities, setIsAllAvailabilities] = useState(true);
+  const [isAllReleases, setIsAllReleases] = useState(true);
 
-  const [countriesList, setCountriesList] = useState(null); //Countries list
+  const [isAllCountries, setIsAllCountries] = useState(true);
 
-  const [ottRegionsList, setOttRegionsList] = useState(null); //OTT Regions list
-  const [activeOttRegion, setActiveOttRegion] = useState(null); //Active OTT Region
-  const [ottProvidersList, setOttProvidersList] = useState(null); //OTT Providers list
-  const [activeOttProviders, setActiveOttProviders] = useState([]); //Array of active OTT Providers
-
-  const [progress, setProgress] = useState(10); //Progress bar
-
-  const [isAllAvailabilities, setIsAllAvailabilities] = useState(true); //All available
-
+  const [languagesList, setLanguagesList] = useState(null);
   const toggleAllAvailabilities = () => {
     setIsAllAvailabilities(!isAllAvailabilities);
   };
 
   const [activeAvalabilitiesArray, setActiveAvalabilitiesArray] = useState([
-    'flatrate',
-    'free',
-    'ads',
-    'rent',
-    'buy',
-  ]); //Array of availabilities
-
+    "flatrate",
+    "free",
+    "ads",
+    "rent",
+    "buy",
+  ]);
   const toggleActiveAvalabilities = (availability) => {
     if (activeAvalabilitiesArray.includes(availability)) {
       setActiveAvalabilitiesArray(
@@ -143,10 +133,8 @@ const CategoryPage = () => {
     }
   };
 
-  const [isAllReleases, setIsAllReleases] = useState(true); //All release dates
-
   useEffect(() => {
-    if (urlParams.with_release_type !== '') {
+    if (urlParams.with_release_type !== "") {
       setIsAllReleases(false);
     } else {
       setIsAllReleases(true);
@@ -159,11 +147,9 @@ const CategoryPage = () => {
 
   const [activeReleaseTypesArray, setActiveReleaseTypesArray] = useState(
     urlParams.with_release_type
-      ? urlParams?.with_release_type.split('|')
-      : ['1', '2', '3', '4', '5', '6']
-  ); //Array of release dates
-
-  // activeReleaseTypesArray changes when urlParams.with_release_type changes
+      ? urlParams?.with_release_type.split("|")
+      : ["1", "2", "3", "4", "5", "6"]
+  );
 
   const toggleActiveReleases = (release) => {
     if (activeReleaseTypesArray.includes(release)) {
@@ -174,10 +160,6 @@ const CategoryPage = () => {
       setActiveReleaseTypesArray([...activeReleaseTypesArray, release]);
     }
   };
-
-  const [isAllCountries, setIsAllCountries] = useState(true); //All countries
-
-  const [languagesList, setLanguagesList] = useState(null); //Languages list
 
   const toggleAllCountries = () => {
     setIsAllCountries(!isAllCountries);
@@ -209,7 +191,7 @@ const CategoryPage = () => {
       try {
         const filterResponse = await fetch(
           `${API_URL}/genre/${
-            showType === 'tv' ? 'tv/' : 'movie/'
+            showType === "tv" ? "tv/" : "movie/"
           }list?api_key=${API}&language=en-US`
         );
         const data = await filterResponse.json();
@@ -219,7 +201,7 @@ const CategoryPage = () => {
       }
     };
     fetchFilter();
-  }, [showType]); //Fetch filter list when show type changes
+  }, [showType]);
 
   useEffect(() => {
     const fetchOttProviders = async () => {
@@ -234,7 +216,7 @@ const CategoryPage = () => {
       }
     };
     fetchOttProviders();
-  }, [urlParams.ott_region]); //Fetch filter list when show type changes
+  }, [urlParams.ott_region]);
 
   useEffect(() => {
     const fetchLanguages = async () => {
@@ -313,7 +295,7 @@ const CategoryPage = () => {
       ...urlParams,
       with_ott_monetization_types:
         activeAvalabilitiesArray.length > 0 &&
-        activeAvalabilitiesArray.join('%7C'),
+        activeAvalabilitiesArray.join("%7C"),
     });
   }, [activeAvalabilitiesArray]);
 
@@ -321,7 +303,7 @@ const CategoryPage = () => {
     setUrlParams({
       ...urlParams,
       with_ott_providers:
-        activeOttProviders.length > 0 && activeOttProviders.join('%7C'),
+        activeOttProviders.length > 0 && activeOttProviders.join("%7C"),
     });
   }, [activeOttProviders]);
 
@@ -329,7 +311,7 @@ const CategoryPage = () => {
     setActiveOttProviders([]);
     setUrlParams({
       ...urlParams,
-      with_ott_providers: '',
+      with_ott_providers: "",
     });
   }, [urlParams.ott_region]);
 
@@ -338,7 +320,7 @@ const CategoryPage = () => {
       ...urlParams,
       certification:
         activeCertificationsArray.length > 0 &&
-        activeCertificationsArray.join('%7C'),
+        activeCertificationsArray.join("%7C"),
     });
   }, [activeCertificationsArray]);
 
@@ -346,7 +328,7 @@ const CategoryPage = () => {
     setUrlParams({
       ...urlParams,
       with_genres:
-        activeGenresArray.length > 0 && activeGenresArray.join('%2C'),
+        activeGenresArray.length > 0 && activeGenresArray.join("%2C"),
     });
   }, [activeGenresArray]);
 
@@ -355,7 +337,7 @@ const CategoryPage = () => {
       ...urlParams,
       with_release_type:
         activeReleaseTypesArray.length > 0 &&
-        activeReleaseTypesArray.join('%7C'),
+        activeReleaseTypesArray.join("%7C"),
     });
   }, [activeReleaseTypesArray]);
 
@@ -381,7 +363,7 @@ const CategoryPage = () => {
         setError(error);
         setLoading(false);
       });
-  }; //Fetch more movies
+  };
 
   const handleSearch = () => {
     const url = generateUrl(urlParams, showType);
@@ -419,36 +401,25 @@ const CategoryPage = () => {
     }
   };
 
-  // function to get nearest next value which is multiple of 4
-  // eg. if value is 5, it will return 8
-
-  const getNearestNextMultipleOfFour = (value) => {
-    let nearestNextMultipleOfFour = value;
-    if (value % 4 !== 0) {
-      nearestNextMultipleOfFour = value + ((4 - (value % 4)) % 4); // if value is 5, it will return 8
-    }
-    return nearestNextMultipleOfFour;
-  };
-
   return (
     <>
       <LoadingBar
-        color='#01b4e4'
+        color="#01b4e4"
         progress={progress}
         onLoaderFinished={() => setProgress(0)}
         shadow={true}
         height={4}
         transitionTime={400}
       />
-      <section className='content container'>
-        <div className='media'>
-          <div className='column d-flex align-items-start w-100 justify-content-center align-content-start'>
-            <div className='content_wrapper d-flex align-items-start align-content-start flex-wrap'>
-              <div className='title row w-100'>
-                <h2 className='w-100 m-0 p-0 fw-bold'>Popular Movies</h2>
+      <section className="content container">
+        <div className="media">
+          <div className="column d-flex align-items-start w-100 justify-content-center align-content-start">
+            <div className="content_wrapper d-flex align-items-start align-content-start flex-wrap">
+              <div className="title row w-100">
+                <h2 className="w-100 m-0 p-0 fw-bold">Popular Movies</h2>
               </div>
-              <div className='content d-flex align-items-start w-100'>
-                <div className='filter-section'>
+              <div className="content d-flex align-items-start w-100">
+                <div className="filter-section">
                   <SortSectionAccordian
                     urlParams={urlParams}
                     setUrlParams={setUrlParams}
@@ -477,26 +448,26 @@ const CategoryPage = () => {
                     toggleFilter={toggleFilter}
                     toggleCertification={toggleCertification}
                   ></FilterSectionAccordian>
-                  <div className='filter-section_wrapper'>
+                  <div className="filter-section_wrapper">
                     <Accordion
                       style={{
-                        width: '100%',
+                        width: "100%",
                       }}
                     >
-                      <Accordion.Item eventKey='0'>
+                      <Accordion.Item eventKey="0">
                         <Accordion.Header>Where To Watch</Accordion.Header>
-                        <Accordion.Body className='ott-provider-filter'>
+                        <Accordion.Body className="ott-provider-filter">
                           <h3
                             style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              width: '100%',
-                              fontSize: '1em',
-                              fontWeight: '300',
-                              marginBottom: '10px',
-                              color: '#000',
+                              display: "inline-flex",
+                              alignItems: "center",
+                              width: "100%",
+                              fontSize: "1em",
+                              fontWeight: "300",
+                              marginBottom: "10px",
+                              color: "#000",
                             }}
-                            className='filter-title p-0'
+                            className="filter-title p-0"
                           >
                             Country
                           </h3>
@@ -511,34 +482,18 @@ const CategoryPage = () => {
                                 }}
                               >
                                 <Dropdown.Toggle
-                                  variant='secondary'
-                                  id='dropdown-basic'
+                                  variant="secondary"
+                                  id="dropdown-basic"
                                 >
                                   <span>
-                                    {urlParams.ott_region && (
-                                      <img
-                                        // src={`https://flagcdn.com/w20/${urlParams.ott_region.toLowerCase()}.png`}
-                                        src={`https://raw.githubusercontent.com/SujalShah3234/All-Country-Flags/master/${urlParams.ott_region}.png`}
-                                        onError={(e) => {
-                                          e.target.onerror = null;
-                                          e.target.src =
-                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8wkWFOYkdG7W9Xf0-aheuTMQHTEsySnpXOQ&usqp=CAU';
-                                        }}
-                                        style={{
-                                          width: '24px',
-                                          height: '20px',
-                                          marginRight: '10px',
-                                        }}
-                                        alt={urlParams.ott_region}
-                                      />
-                                    )}
+                               
                                     {urlParams.ott_region
                                       ? ottRegionsList.find(
                                           (country) =>
                                             country.iso_3166_1 ===
                                             urlParams.ott_region
                                         ).native_name
-                                      : 'Select Country'}
+                                      : "Select Country"}
                                   </span>
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
@@ -552,12 +507,12 @@ const CategoryPage = () => {
                                         onError={(e) => {
                                           e.target.onerror = null;
                                           e.target.src =
-                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8wkWFOYkdG7W9Xf0-aheuTMQHTEsySnpXOQ&usqp=CAU';
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8wkWFOYkdG7W9Xf0-aheuTMQHTEsySnpXOQ&usqp=CAU";
                                         }}
                                         style={{
-                                          width: '24px',
-                                          height: '20px',
-                                          marginRight: '10px',
+                                          width: "24px",
+                                          height: "20px",
+                                          marginRight: "10px",
                                         }}
                                         alt={country.iso_3166_1}
                                       />
@@ -568,13 +523,13 @@ const CategoryPage = () => {
                               </Dropdown>
                             </Form>
                           )}
-                          <span className='ott_provider_wrapper'>
-                            <ul className='ott_providers'>
+                          <span className="ott_provider_wrapper">
+                            <ul className="ott_providers">
                               {ottProvidersList &&
                                 ottProvidersList.map((provider, index) => (
                                   <OverlayTrigger
                                     key={index}
-                                    placement='top'
+                                    placement="top"
                                     overlay={
                                       <Tooltip id={`tooltip`}>
                                         {provider.provider_name}
@@ -586,8 +541,8 @@ const CategoryPage = () => {
                                       onClick={() =>
                                         toggleOttProviders(provider.provider_id)
                                       }
-                                      data-bs-toggle='tooltip'
-                                      data-bs-placement='top'
+                                      data-bs-toggle="tooltip"
+                                      data-bs-placement="top"
                                       data-original-title={
                                         provider.provider_name
                                       }
@@ -595,8 +550,8 @@ const CategoryPage = () => {
                                       <span>
                                         <img
                                           src={`https://www.themoviedb.org/t/p/original${provider.logo_path}`}
-                                          width='50'
-                                          height='50'
+                                          width="50"
+                                          height="50"
                                           alt={provider.name}
                                         />
                                         <div
@@ -604,11 +559,11 @@ const CategoryPage = () => {
                                             activeOttProviders.includes(
                                               provider.provider_id
                                             )
-                                              ? 'ott_provider_checkbox_wrapper active'
-                                              : 'ott_provider_checkbox_wrapper'
+                                              ? "ott_provider_checkbox_wrapper active"
+                                              : "ott_provider_checkbox_wrapper"
                                           }
                                         >
-                                          <span className='check-icon'></span>
+                                          <span className="check-icon"></span>
                                         </div>
                                       </span>
                                     </li>
@@ -620,40 +575,33 @@ const CategoryPage = () => {
                       </Accordion.Item>
                     </Accordion>
                   </div>
-                  <div className='search-btn' onClick={handleSearch}>
+                  <div className="search-btn" onClick={handleSearch}>
                     Search
                   </div>
                 </div>
-                <div className='movies-section'>
-                  <div className='wrapper'>
-                    <section className='pannel'>
-                      <div className='media_items'>
+                <div className="movies-section">
+                  <div className="wrapper">
+                    <section className="pannel">
+                      <div className="media_items">
                         {loading && (
-                          <div className='loader'>
-                            <img
-                              src={require('../../assets/loader.gif')}
-                              alt='loader'
-                            />
+                          <div className="loader">
+                            <p>Loading...</p>
                           </div>
                         )}
                         {movies && (
-                          <InfiniteScroll
-                            dataLength={movies.length}
+                          <div
                             next={() => {
                               setProgress(50);
                               fetchMoreMovies();
                             }}
                             hasMore={hasMore}
                             loader={
-                              <div className='loader'>
-                                <img
-                                  src={require('../../assets/loader.gif')}
-                                  alt='loader'
-                                />
+                              <div className="loader">
+                                <p>Loading...</p>
                               </div>
                             }
                           >
-                            <div className='page_1'>
+                            <div className="page_1">
                               {movies ? (
                                 movies.map((movie, index) => (
                                   <FilterMovieCard
@@ -675,13 +623,13 @@ const CategoryPage = () => {
                                 </div>
                               )}
                             </div>
-                          </InfiniteScroll>
+                          </div>
                         )}
 
                         {urlParams.page !== totalPages && !loading && (
-                          <div className='load_more'>
+                          <div className="load_more">
                             <Link
-                              to=''
+                              to=""
                               onClick={() => {
                                 setHasMore(true);
                                 fetchMoreMovies();
@@ -706,4 +654,3 @@ const CategoryPage = () => {
 };
 
 export default CategoryPage;
-

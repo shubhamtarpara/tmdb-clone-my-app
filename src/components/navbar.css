@@ -131,7 +131,6 @@
     .show {
         display: flex;
         flex-direction: column;
-        padding-left: 1rem;
         align-items: center;
         z-index: 1;
     }

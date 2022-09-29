@@ -79,14 +79,7 @@
     height: 100%;
     text-align: center;
 }
-.F-M-card .card-content .card-content_rankings .ring .ring-inner .percent {
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+
 .F-M-card .card-content .card-content_rankings .ring .ring-inner .percent .rating-text {
     position: absolute;
     color: #fff;
