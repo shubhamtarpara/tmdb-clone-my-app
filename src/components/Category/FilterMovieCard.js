@@ -16,7 +16,6 @@ const FilterMovieCard = ({
   showType,
   movie,
 }) => {
-  console.log(movie.vote_average);
   movie.media_type && (movie.media_type = movie.media_type.toLowerCase());
   let detailsPath;
   switch (showType) {

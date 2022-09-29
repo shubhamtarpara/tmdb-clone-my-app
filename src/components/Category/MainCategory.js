@@ -30,7 +30,9 @@ const CategoryPage = () => {
   const [genresList, setGenresList] = useState(null);
   const [activeGenresArray, setActiveGenresArray] = useState([]);
   const [CertificationList, setCertificationList] = useState(null);
-  const [activeCertificationsArray, setActiveCertificationsArray] = useState([]);
+  const [activeCertificationsArray, setActiveCertificationsArray] = useState(
+    []
+  );
   const [countriesList, setCountriesList] = useState(null);
   const [ottRegionsList, setOttRegionsList] = useState(null);
   const [ottProvidersList, setOttProvidersList] = useState(null);
@@ -53,7 +55,6 @@ const CategoryPage = () => {
     setDefaultParams(getInitialParams(showType, categoryType));
   }, [showType, categoryType]);
 
-
   const generateUrl = useCallback(
     (params) => {
       let url = `${API_URL}/discover/${showType}?api_key=${API}`;
@@ -72,10 +73,6 @@ const CategoryPage = () => {
   useEffect(() => {
     setDiscoverUrl(generateUrl(defaultParams));
   }, [defaultParams, generateUrl]);
-
-
-
-
 
   useEffect(() => {
     switch (urlParams.sort_by) {
@@ -108,7 +105,6 @@ const CategoryPage = () => {
         break;
     }
   }, [urlParams.sort_by]);
-
 
   const toggleAllAvailabilities = () => {
     setIsAllAvailabilities(!isAllAvailabilities);
@@ -183,7 +179,7 @@ const CategoryPage = () => {
         setLoading(false);
       });
   }, [urlParams.page, showType, categoryType, discoverUrl]);
-
+  console.log(categoryType);
   useEffect(() => {
     const fetchFilter = async () => {
       try {
@@ -406,7 +402,13 @@ const CategoryPage = () => {
           <div className="column d-flex align-items-start w-100 justify-content-center align-content-start">
             <div className="content_wrapper d-flex align-items-start align-content-start flex-wrap">
               <div className="title row w-100">
-                <h2 className="w-100 m-0 p-0 fw-bold">Popular Movies</h2>
+                <h2 className="w-100 m-0 p-0 fw-bold">
+                  {categoryType.charAt(0).toUpperCase() +
+                    categoryType.slice(1).split("_").join(" ")}
+                  &nbsp;
+                  {showType.charAt(0).toUpperCase() +
+                    showType.slice(1).replace("_", " ")}
+                </h2>
               </div>
               <div className="content d-flex align-items-start w-100">
                 <div className="filter-section">
@@ -476,7 +478,6 @@ const CategoryPage = () => {
                                   id="dropdown-basic"
                                 >
                                   <span>
-                               
                                     {urlParams.ott_region
                                       ? ottRegionsList.find(
                                           (country) =>
@@ -492,7 +493,6 @@ const CategoryPage = () => {
                                       key={country.iso_3166_1}
                                       eventKey={country.iso_3166_1}
                                     >
-                                     
                                       {country.native_name}
                                     </Dropdown.Item>
                                   ))}
