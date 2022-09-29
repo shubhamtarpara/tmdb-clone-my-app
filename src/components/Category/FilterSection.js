@@ -485,8 +485,21 @@ function FilterSectionAccordian(props) {
                   <span className="date_picker_wrapper">
                     <DatePicker
                       dateFormat="MM/dd/yyyy"
-                      selected={fromDate}
-                      onChange={(date) => setFromDate(date)}
+                      selected={
+                        props.urlParams["release_date.gte"]
+                          ? new Date(props.urlParams["release_date.gte"])
+                          : ""
+                      }
+                      onChange={(date) => {
+                        if (props.showType === "movie") {
+                          props.setUrlParams({
+                            ...props.urlParams,
+                            "release_date.gte": date
+                              .toISOString()
+                              .split("T")[0],
+                          });
+                        }
+                      }}
                     />
                   </span>
                 </span>
@@ -575,7 +588,6 @@ function FilterSectionAccordian(props) {
                   <span className="date_picker_wrapper">
                     <DatePicker
                       dateFormat="MM/dd/yyyy"
-                      // selected={new Date(startDate)}
                       selected={
                         !isAllEpisodes
                           ? props.urlParams["first_air_date.gte"] !== ""
@@ -586,7 +598,6 @@ function FilterSectionAccordian(props) {
                           : ""
                       }
                       onChange={(date) => {
-                        // setStartDate(date.toISOString().split('T')[0]);
                         isAllEpisodes
                           ? props.setUrlParams({
                               ...props.urlParams,
@@ -611,7 +622,6 @@ function FilterSectionAccordian(props) {
                   <span className="date_picker_wrapper">
                     <DatePicker
                       dateFormat="MM/dd/yyyy"
-                      // selected={new Date(endDate)}
                       selected={
                         !isAllEpisodes
                           ? props.urlParams["first_air_date.lte"] !== ""
@@ -622,7 +632,6 @@ function FilterSectionAccordian(props) {
                           : ""
                       }
                       onChange={(date) => {
-                        // setEndDate(date.toISOString().split('T')[0]);
                         isAllEpisodes
                           ? props.setUrlParams({
                               ...props.urlParams,

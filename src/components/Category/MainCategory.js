@@ -10,7 +10,7 @@ import {
   Form,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import LoadingBar from "react-top-loading-bar";
+import InfiniteScroll from "react-infinite-scroller";
 import { API, API_URL } from "../../Constants";
 import FilterMovieCard from "./FilterMovieCard";
 import "react-datepicker/dist/react-datepicker.css";
@@ -22,8 +22,8 @@ import FilterSectionAccordian from "./FilterSection";
 const CategoryPage = () => {
   const { showType, categoryType } = useParams();
   const [movies, setMovies] = useState(null);
-  const [hasMore, setHasMore] = useState(false);
-  const [totalPages, setTotalPages] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+
   const [dropdownTitle, setDropdownTitle] = useState("Popularity Descending");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -163,14 +163,13 @@ const CategoryPage = () => {
     setLoading(true);
     setError(null);
     setMovies(null);
-    setHasMore(false);
-    setTotalPages(null);
+   
 
     fetch(discoverUrl)
       .then((response) => response.json())
       .then((data) => {
         setMovies(data.results);
-        setTotalPages(data.total_pages);
+      
         setLoading(false);
         setProgress(100);
       })
@@ -179,7 +178,6 @@ const CategoryPage = () => {
         setLoading(false);
       });
   }, [urlParams.page, showType, categoryType, discoverUrl]);
-  console.log(categoryType);
   useEffect(() => {
     const fetchFilter = async () => {
       try {
@@ -348,14 +346,10 @@ const CategoryPage = () => {
       .then((response) => response.json())
       .then((data) => {
         setMovies([...movies, ...data.results]);
-        setTotalPages(data.total_pages);
+     
         setHasMore(data.total_pages > urlParams.page);
         setLoading(false);
         setProgress(100);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
       });
   };
 
@@ -566,56 +560,35 @@ const CategoryPage = () => {
                           </div>
                         )}
                         {movies && (
-                          <div
-                            next={() => {
-                              setProgress(50);
-                              fetchMoreMovies();
-                            }}
+                          <InfiniteScroll
+                            pageStart={1}
+                            loadMore={fetchMoreMovies}
                             hasMore={hasMore}
-                            loader={
-                              <div className="loader">
-                                <p>Loading...</p>
-                              </div>
-                            }
                           >
                             <div className="page_1">
-                              {movies ? (
-                                movies.map((movie, index) => (
-                                  <FilterMovieCard
-                                    key={index}
-                                    id={movie.id}
-                                    poster={movie.poster_path}
-                                    title={movie.name ?? movie.title}
-                                    date={
-                                      movie.first_air_date ?? movie.release_date
-                                    }
-                                    rating={movie.vote_average * 10}
-                                    showType={showType}
-                                    movie={movie}
-                                  />
-                                ))
-                              ) : (
-                                <div>
-                                  No items were found that match your query.
-                                </div>
-                              )}
+                              {movies.map((movie, index) => (
+                                <FilterMovieCard
+                                  key={index}
+                                  id={movie.id}
+                                  poster={movie.poster_path}
+                                  title={movie.name ?? movie.title}
+                                  date={
+                                    movie.first_air_date ?? movie.release_date
+                                  }
+                                  rating={movie.vote_average * 10}
+                                  showType={showType}
+                                  movie={movie}
+                                />
+                              ))}
                             </div>
-                          </div>
-                        )}
-
-                        {urlParams.page !== totalPages && !loading && (
-                          <div className="load_more">
-                            <Link
-                              to=""
-                              onClick={() => {
-                                setHasMore(true);
-                                fetchMoreMovies();
-                                setProgress(50);
-                              }}
-                            >
-                              Load More
-                            </Link>
-                          </div>
+                            {/* {urlParams.page !== totalPages && !loading && (
+                              <div className="load_more">
+                                <Link to="" onClick={() => {}}>
+                                  Load More
+                                </Link>
+                              </div>
+                            )} */}
+                          </InfiniteScroll>
                         )}
                       </div>
                     </section>
