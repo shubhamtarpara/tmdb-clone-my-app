@@ -229,6 +229,7 @@
   background: rgb(3, 37, 65);
   margin-right: 20px;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .chart {

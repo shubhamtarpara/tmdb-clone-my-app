@@ -3,6 +3,7 @@ import ReactPaginate from "react-paginate";
 import { useSearchParams, Link, useParams } from "react-router-dom";
 import { GetSearchData } from "../../api";
 import SearchCard from "./SearchCard";
+import SearchPeopleCard from "./SearchPeopleCard";
 import "./searchresult.css";
 // import SearchPeopleCard from "./SearchPeopleCard";
 
@@ -199,9 +200,9 @@ const SearchResult = () => {
                   />
                 ))}
 
-              {/* {params.currentData === "tv" &&
-                searchCollectionData.results &&
-                searchTvData.results.map((currentSearchTvData) => (
+              {params.currentData === "tv" &&
+                tvData.results &&
+                tvData.results.map((currentSearchTvData) => (
                   <SearchCard
                     key={currentSearchTvData.id}
                     poster_path={currentSearchTvData.poster_path}
@@ -212,8 +213,8 @@ const SearchResult = () => {
                 ))}
 
               {params.currentData === "collection" &&
-                searchCollectionData.results &&
-                searchCollectionData.results.map(
+                collectionData.results &&
+                collectionData.results.map(
                   (currentSearchCollectionData) => (
                     <SearchCard
                       key={currentSearchCollectionData.id}
@@ -223,19 +224,19 @@ const SearchResult = () => {
                       overview={currentSearchCollectionData.overview}
                     />
                   )
-                )} */}
+                )}
 
-              {/* {params.currentData === "people" &&
-                searchPersonData.results &&
-                searchPersonData.results.map((currentSearchPeopleData) => (
-                  <SearchCard
+              {params.currentData === "people" &&
+                personData.results &&
+                personData.results.map((currentSearchPeopleData) => (
+                  <SearchPeopleCard
                     key={currentSearchPeopleData.id}
                     profile_path={currentSearchPeopleData.profile_path}
                     name={currentSearchPeopleData.name}
                     department={currentSearchPeopleData.known_for_department}
                     known_for_array={currentSearchPeopleData.known_for}
                   />
-                ))} */}
+                ))}
             </div>
 
             {movieData.results && movieData.results.length === 0 && (

@@ -10,7 +10,7 @@ import {
   Form,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import InfiniteScroll from "react-infinite-scroller";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { API, API_URL } from "../../Constants";
 import FilterMovieCard from "./FilterMovieCard";
 import "react-datepicker/dist/react-datepicker.css";
@@ -356,20 +356,22 @@ const CategoryPage = () => {
     });
   }, [activeReleaseTypesArray]);
 
-  const fetchMoreMovies = () => {
+  const fetchMoreMovies = (page) => {
     setLoading(true);
     setError(null);
-    setUrlParams({
-      ...urlParams,
-      page: urlParams.page + 1,
-    });
-    console.log(urlParams.page, "page");
+
+    // console.log(urlParams.page, "page");
     setDiscoverUrl(generateUrl(urlParams));
 
     fetch(discoverUrl)
       .then((response) => response.json())
       .then((data) => {
-        setMovies([...movies, ...data.results]);
+        if (urlParams.page === 1) {
+          setMovies(data.results);
+        }
+        else{
+          setMovies([...movies, ...data.results]);
+        }
         // setTotalPages(data.total_pages);
         // setHasMore(data.total_pages > urlParams.page);
         setLoading(false);
@@ -630,7 +632,15 @@ const CategoryPage = () => {
                             dataLength={movies.length}
                             next={() => {
                               setProgress(50);
-                              fetchMoreMovies();
+                              console.log(urlParams.page, "page-auto");
+
+                              setUrlParams(
+                                {
+                                  ...urlParams,
+                                  page: urlParams.page + 1,
+                                },
+                                fetchMoreMovies(urlParams.page + 1)
+                              );
                             }}
                             hasMore={hasMore}
                             loader={
@@ -673,8 +683,14 @@ const CategoryPage = () => {
                               onClick={() => {
                                 setIsLoadMore(true);
                                 setHasMore(true);
-                                fetchMoreMovies();
-                               
+                                setUrlParams(
+                                  {
+                                    ...urlParams,
+                                    page: urlParams.page + 1,
+                                  },
+                                  fetchMoreMovies(urlParams.page + 1)
+                                );
+                                console.log(urlParams.page, "page");
                               }}
                             >
                               Load More
