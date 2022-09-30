@@ -11,7 +11,7 @@ import SingleMovieDetail from "./components/Single page/Single page movie/Single
 import TvDetail from "./components/Tv detail/TvDetail";
 import SeasonDetail from "./components/Tv detail/SeasionDetail";
 import SearchResult from "./components/Search/SearchResult";
-// import CategoryPage from "./components/Category/MainCategory";
+import CategoryPage from "./components/Category/MainCategory";
 import Login from "./components/login/Login";
 import SignUp from "./components/signup/SignUp";
 
@@ -34,10 +34,10 @@ const App = () => {
           />
           <Route path="/movie/detail/:id" element={<SingleMovieDetail />} />
           <Route path="/tv/detail/:id" element={<TvDetail />} />
-          {/* <Route
+          <Route
             path="/:showType/category/:categoryType"
             element={<CategoryPage />}
-          /> */}
+          />
           <Route path="/tv/season/:id" element={<SeasonDetail />} />
           <Route path="/search/:currentData" element={<SearchResult />} />
           <Route path="/login" element={<Login />} />

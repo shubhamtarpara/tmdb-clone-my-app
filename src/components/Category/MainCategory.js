@@ -20,32 +20,14 @@ import SortSectionAccordian from "./SortSection";
 import FilterSectionAccordian from "./FilterSection";
 
 const CategoryPage = () => {
-  const { showType, categoryType } = useParams();
-  const [movies, setMovies] = useState(null);
-  const [hasMore, setHasMore] = useState(true);
-
-  const [dropdownTitle, setDropdownTitle] = useState("Popularity Descending");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [genresList, setGenresList] = useState(null);
-  const [activeGenresArray, setActiveGenresArray] = useState([]);
-  const [CertificationList, setCertificationList] = useState(null);
-  const [activeCertificationsArray, setActiveCertificationsArray] = useState(
-    []
-  );
-  const [countriesList, setCountriesList] = useState(null);
-  const [ottRegionsList, setOttRegionsList] = useState(null);
-  const [ottProvidersList, setOttProvidersList] = useState(null);
-  const [activeOttProviders, setActiveOttProviders] = useState([]);
-  const [progress, setProgress] = useState(10);
-  const [isAllAvailabilities, setIsAllAvailabilities] = useState(true);
-  const [isAllReleases, setIsAllReleases] = useState(true);
-  const [isAllCountries, setIsAllCountries] = useState(true);
-  const [languagesList, setLanguagesList] = useState(null);
-
+  const { showType, categoryType } = useParams(); // Get params from url
+  const [isLoadMore, setIsLoadMore] = useState(false);
+  // Default Parameters when categoryType changed
   const [defaultParams, setDefaultParams] = useState(
     getInitialParams(showType, categoryType)
   );
+
+  // Parameters when filter changes
   const [urlParams, setUrlParams] = useState(
     getInitialParams(showType, categoryType)
   );
@@ -54,6 +36,8 @@ const CategoryPage = () => {
     setUrlParams(getInitialParams(showType, categoryType));
     setDefaultParams(getInitialParams(showType, categoryType));
   }, [showType, categoryType]);
+
+  const [movies, setMovies] = useState(null); //Array of movies
 
   const generateUrl = useCallback(
     (params) => {
@@ -73,6 +57,15 @@ const CategoryPage = () => {
   useEffect(() => {
     setDiscoverUrl(generateUrl(defaultParams));
   }, [defaultParams, generateUrl]);
+
+  //Fetch movies based on type
+  const [loading, setLoading] = useState(true); //Loading
+  const [error, setError] = useState(null); //Error handling
+
+  const [hasMore, setHasMore] = useState(false); //Infinite scroll
+  const [totalPages, setTotalPages] = useState(null); //total pages of movies
+
+  const [dropdownTitle, setDropdownTitle] = useState("Popularity Descending"); //Dropdown title
 
   useEffect(() => {
     switch (urlParams.sort_by) {
@@ -106,6 +99,25 @@ const CategoryPage = () => {
     }
   }, [urlParams.sort_by]);
 
+  const [genresList, setGenresList] = useState(null); //Filter list
+  const [activeGenresArray, setActiveGenresArray] = useState([]); //Array of filters
+
+  const [CertificationList, setCertificationList] = useState(null); //Certification list
+  const [activeCertificationsArray, setActiveCertificationsArray] = useState(
+    []
+  ); //Array of certifications
+
+  const [countriesList, setCountriesList] = useState(null); //Countries list
+
+  const [ottRegionsList, setOttRegionsList] = useState(null); //OTT Regions list
+  const [activeOttRegion, setActiveOttRegion] = useState(null); //Active OTT Region
+  const [ottProvidersList, setOttProvidersList] = useState(null); //OTT Providers list
+  const [activeOttProviders, setActiveOttProviders] = useState([]); //Array of active OTT Providers
+
+  const [progress, setProgress] = useState(10); //Progress bar
+
+  const [isAllAvailabilities, setIsAllAvailabilities] = useState(true); //All available
+
   const toggleAllAvailabilities = () => {
     setIsAllAvailabilities(!isAllAvailabilities);
   };
@@ -116,7 +128,8 @@ const CategoryPage = () => {
     "ads",
     "rent",
     "buy",
-  ]);
+  ]); //Array of availabilities
+
   const toggleActiveAvalabilities = (availability) => {
     if (activeAvalabilitiesArray.includes(availability)) {
       setActiveAvalabilitiesArray(
@@ -126,6 +139,8 @@ const CategoryPage = () => {
       setActiveAvalabilitiesArray([...activeAvalabilitiesArray, availability]);
     }
   };
+
+  const [isAllReleases, setIsAllReleases] = useState(true); //All release dates
 
   useEffect(() => {
     if (urlParams.with_release_type !== "") {
@@ -155,29 +170,37 @@ const CategoryPage = () => {
     }
   };
 
+  const [isAllCountries, setIsAllCountries] = useState(true); //All countries
+
+  const [languagesList, setLanguagesList] = useState(null); //Languages list
+
   const toggleAllCountries = () => {
     setIsAllCountries(!isAllCountries);
   };
 
   useEffect(() => {
-    setLoading(true);
-    setError(null);
-    setMovies(null);
-   
+    if (!isLoadMore) {
+      setLoading(true);
+      setError(null);
+      setMovies(null);
+      setHasMore(false);
+      setTotalPages(null);
 
-    fetch(discoverUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        setMovies(data.results);
-      
-        setLoading(false);
-        setProgress(100);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
-  }, [urlParams.page, showType, categoryType, discoverUrl]);
+      fetch(discoverUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          setMovies(data.results);
+          setTotalPages(data.total_pages);
+          setLoading(false);
+          setProgress(100);
+        })
+        .catch((error) => {
+          setError(error);
+          setLoading(false);
+        });
+    }
+  }, [showType, categoryType, discoverUrl]);
+
   useEffect(() => {
     const fetchFilter = async () => {
       try {
@@ -340,20 +363,27 @@ const CategoryPage = () => {
       ...urlParams,
       page: urlParams.page + 1,
     });
+    console.log(urlParams.page, "page");
     setDiscoverUrl(generateUrl(urlParams));
 
     fetch(discoverUrl)
       .then((response) => response.json())
       .then((data) => {
         setMovies([...movies, ...data.results]);
-     
-        setHasMore(data.total_pages > urlParams.page);
+        // setTotalPages(data.total_pages);
+        // setHasMore(data.total_pages > urlParams.page);
         setLoading(false);
         setProgress(100);
+      })
+
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
       });
-  };
+  }; //Fetch more movies
 
   const handleSearch = () => {
+    setIsLoadMore(false);
     const url = generateUrl(urlParams, showType);
     setDiscoverUrl(url);
   };
@@ -389,6 +419,17 @@ const CategoryPage = () => {
     }
   };
 
+  // function to get nearest next value which is multiple of 4
+  // eg. if value is 5, it will return 8
+
+  const getNearestNextMultipleOfFour = (value) => {
+    let nearestNextMultipleOfFour = value;
+    if (value % 4 !== 0) {
+      nearestNextMultipleOfFour = value + ((4 - (value % 4)) % 4); // if value is 5, it will return 8
+    }
+    return nearestNextMultipleOfFour;
+  };
+
   return (
     <>
       <section className="content container">
@@ -396,13 +437,7 @@ const CategoryPage = () => {
           <div className="column d-flex align-items-start w-100 justify-content-center align-content-start">
             <div className="content_wrapper d-flex align-items-start align-content-start flex-wrap">
               <div className="title row w-100">
-                <h2 className="w-100 m-0 p-0 fw-bold">
-                  {categoryType.charAt(0).toUpperCase() +
-                    categoryType.slice(1).split("_").join(" ")}
-                  &nbsp;
-                  {showType.charAt(0).toUpperCase() +
-                    showType.slice(1).replace("_", " ")}
-                </h2>
+                <h2 className="w-100 m-0 p-0 fw-bold">Popular Movies</h2>
               </div>
               <div className="content d-flex align-items-start w-100">
                 <div className="filter-section">
@@ -472,6 +507,23 @@ const CategoryPage = () => {
                                   id="dropdown-basic"
                                 >
                                   <span>
+                                    {urlParams.ott_region && (
+                                      <img
+                                        // src={`https://flagcdn.com/w20/${urlParams.ott_region.toLowerCase()}.png`}
+                                        src={`https://raw.githubusercontent.com/SujalShah3234/All-Country-Flags/master/${urlParams.ott_region}.png`}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src =
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8wkWFOYkdG7W9Xf0-aheuTMQHTEsySnpXOQ&usqp=CAU";
+                                        }}
+                                        style={{
+                                          width: "24px",
+                                          height: "20px",
+                                          marginRight: "10px",
+                                        }}
+                                        alt={urlParams.ott_region}
+                                      />
+                                    )}
                                     {urlParams.ott_region
                                       ? ottRegionsList.find(
                                           (country) =>
@@ -487,6 +539,20 @@ const CategoryPage = () => {
                                       key={country.iso_3166_1}
                                       eventKey={country.iso_3166_1}
                                     >
+                                      <img
+                                        src={`https://raw.githubusercontent.com/SujalShah3234/All-Country-Flags/master/${country.iso_3166_1}.png`}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src =
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8wkWFOYkdG7W9Xf0-aheuTMQHTEsySnpXOQ&usqp=CAU";
+                                        }}
+                                        style={{
+                                          width: "24px",
+                                          height: "20px",
+                                          marginRight: "10px",
+                                        }}
+                                        alt={country.iso_3166_1}
+                                      />
                                       {country.native_name}
                                     </Dropdown.Item>
                                   ))}
@@ -556,39 +622,66 @@ const CategoryPage = () => {
                       <div className="media_items">
                         {loading && (
                           <div className="loader">
-                            <p>Loading...</p>
+                            <p>loading</p>
                           </div>
                         )}
                         {movies && (
                           <InfiniteScroll
-                            pageStart={1}
-                            loadMore={fetchMoreMovies}
+                            dataLength={movies.length}
+                            next={() => {
+                              setProgress(50);
+                              fetchMoreMovies();
+                            }}
                             hasMore={hasMore}
+                            loader={
+                              <div className="loader">
+                                <p></p>
+                              </div>
+                            }
                           >
                             <div className="page_1">
-                              {movies.map((movie, index) => (
-                                <FilterMovieCard
-                                  key={index}
-                                  id={movie.id}
-                                  poster={movie.poster_path}
-                                  title={movie.name ?? movie.title}
-                                  date={
-                                    movie.first_air_date ?? movie.release_date
-                                  }
-                                  rating={movie.vote_average * 10}
-                                  showType={showType}
-                                  movie={movie}
-                                />
-                              ))}
+                              {movies ? (
+                                movies.map((movie, index) => (
+                                  <FilterMovieCard
+                                    key={index}
+                                    id={movie.id}
+                                    poster={movie.poster_path}
+                                    title={movie.name ?? movie.title}
+                                    date={
+                                      movie.first_air_date ?? movie.release_date
+                                    }
+                                    rating={movie.vote_average * 10}
+                                    showType={showType}
+                                    movie={movie}
+                                  />
+                                ))
+                              ) : (
+                                <div>
+                                  No items were found that match your query.
+                                </div>
+                              )}
                             </div>
-                            {/* {urlParams.page !== totalPages && !loading && (
-                              <div className="load_more">
-                                <Link to="" onClick={() => {}}>
-                                  Load More
-                                </Link>
-                              </div>
-                            )} */}
                           </InfiniteScroll>
+                        )}
+
+                        {urlParams.page !== totalPages &&
+                        !loading &&
+                        movies.length !== 0 ? (
+                          <div className="load_more">
+                            <Link
+                              to=""
+                              onClick={() => {
+                                setIsLoadMore(true);
+                                setHasMore(true);
+                                fetchMoreMovies();
+                               
+                              }}
+                            >
+                              Load More
+                            </Link>
+                          </div>
+                        ) : (
+                          ""
                         )}
                       </div>
                     </section>
