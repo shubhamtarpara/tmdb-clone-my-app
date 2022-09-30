@@ -20,7 +20,7 @@ const MovieDetailRightSection = ({ id, isMovie }) => {
     const getData = async () => {
       await GetDetails(isMovie, id).then((response) => {
         setMovieData(response.data);
-        console.log(response.data, 'movie data')
+        // console.log(response.data, 'movie data')
       });
       setIsLoading(true);
     };

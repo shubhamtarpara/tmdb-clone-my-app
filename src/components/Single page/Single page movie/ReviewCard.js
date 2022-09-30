@@ -1,55 +1,65 @@
 import React from "react";
-import reviewStar from "../../../assets/star.svg";
-import "./reviewcard.css";
 
 const ReviewCard = ({
   author,
   authorImage,
   rating,
+  userLink,
   created_at,
   content,
   url,
 }) => {
+  console.log(author)
   return (
     <>
-      <div className="card review__card" key={author}>
-        <div className="main-review__section">
-          <div className="author__img">
-            <div>
-              <img src={authorImage} alt="author_img" />
-            </div>
+      <div className="card mb-4" key={author}>
+        <div className="review-top-section">
+          <div className="avatar">
+            <span>
+              <img className="review-image" src={authorImage} alt={author} />
+            </span>
           </div>
 
-          <div className="review__info">
-            <div className="review__owner">
-              {/* <a href={''}></a> */}A review by {author}
+          <div className="review-info">
+            <h3 className="d-flex">
+              <a href={userLink} target="_blank" rel="noreferrer">
+                A review by {author}
+              </a>
               {rating && (
-                <div className="review__rating">
-                  <img
-                    className="review__icon"
-                    src={reviewStar}
-                    alt="review_star"
-                  />
+                <div className="rating ms-2">
+                  <span className="star"></span>
                   {rating.toFixed(1)}
                 </div>
               )}
-            </div>
-            <h5 className="review__written">
-              <p className="review__text">Written by</p> &nbsp;
-              <p className="author__name">{author}</p>&nbsp;{" "}
-              <p className="review__text">on</p>&nbsp;
-              <p className="author__name">
-                {new Date(created_at).toLocaleDateString("en-US", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </p>
+            </h3>
+
+            <h5>
+              Written by
+              <a href={userLink} target="_blank" rel="noreferrer">
+                {author}
+              </a>
+              on &nbsp;
+              {new Date(created_at).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
             </h5>
           </div>
         </div>
-        <div className="review__length">
-          <pre className="review__content">{content.slice(0, 600)}</pre>
+
+        <div className="review-bottom-section">
+          <pre>
+            {content.slice(0, 600)}
+            {content.length > 600 && (
+              <>
+                ...
+                <a className="underline" target="_blank" rel="noreferrer" href={url}>
+                  read the rest.
+                </a>
+              </>
+            )}
+          </pre>
         </div>
       </div>
     </>

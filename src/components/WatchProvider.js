@@ -30,6 +30,7 @@ const WatchProvider = ({id,isMovie}) => {
               }
             });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
   return  (

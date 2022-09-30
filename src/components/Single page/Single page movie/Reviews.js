@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { GetReview } from "../../../api";
 import ReviewCard from "./ReviewCard";
+import { Link } from "react-router-dom";
 import defaultImage from "../../../assets/default.jpg";
 import "./reviews.css";
 
@@ -67,6 +68,11 @@ const Reviews = ({ id, isMovie }) => {
                       );
                     })}
               </div>
+              {review.length !== 0 && (
+                <p className="new_button ">
+                  <Link to={`/${isMovie}/reviews/${id}`}>Read All Reviews</Link>
+                </p>
+              )}
             </div>
           </section>
         </section>

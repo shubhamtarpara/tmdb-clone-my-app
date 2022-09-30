@@ -14,6 +14,7 @@ import SearchResult from "./components/Search/SearchResult";
 import CategoryPage from "./components/Category/MainCategory";
 import Login from "./components/login/Login";
 import SignUp from "./components/signup/SignUp";
+import FullReview from "./components/Single page/Single page movie/FullReview";
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
             path="/:showType/category/:categoryType"
             element={<CategoryPage />}
           />
+          <Route path="/:isMovie/reviews/:reviewID" element={<FullReview />} />
           <Route path="/tv/season/:id" element={<SeasonDetail />} />
           <Route path="/search/:currentData" element={<SearchResult />} />
           <Route path="/login" element={<Login />} />
