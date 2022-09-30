@@ -7,7 +7,7 @@ const SearchCard = ({ poster_path, title, realse_date, overview }) => {
   return (
     <>
       <div className="card search-content-container">
-        <div className="search-img-contaner">
+        <div className="search-img-container">
           <img
             src={
               poster_path

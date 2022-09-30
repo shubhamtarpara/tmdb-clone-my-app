@@ -1,4 +1,4 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -28,4 +28,9 @@
     text-overflow: ellipsis;
     overflow: hidden;
     margin: 0;
+}
+
+.search-img-container img {
+    width: 94px;
+    height: 141px;
 }
