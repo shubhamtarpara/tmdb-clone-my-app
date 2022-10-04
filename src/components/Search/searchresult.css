@@ -97,8 +97,9 @@
     width: 100%;
 }
 
-
-
+.main-search-detail a {
+    color: #000;
+}
 .search-content-container {
     display: flex !important;
     flex-direction: row !important;
