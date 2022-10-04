@@ -1,4 +1,5 @@
 import React from "react";
+
 import thumbnail from "../../assets/thumbnail.svg";
 
 const SearchPeopleCard = ({

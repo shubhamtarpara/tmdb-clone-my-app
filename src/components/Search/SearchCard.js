@@ -1,13 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import thumbnail from "../../assets/thumbnail.svg";
-import './searchcard.css'
+import "./searchcard.css";
 
-const SearchCard = ({ poster_path, title, realse_date, overview }) => {
- 
+const SearchCard = ({ poster_path, title, realse_date, overview, id, isMovie }) => {
   return (
-    <>
-      <div className="card search-content-container">
-        <div className="search-img-container">
+    <div className="card search-content-container">
+      <div className="search-img-container">
+        <Link to={`/${isMovie}/detail/${id}`}>
           <img
             src={
               poster_path
@@ -16,18 +16,21 @@ const SearchCard = ({ poster_path, title, realse_date, overview }) => {
             }
             alt={title}
           />
-        </div>
-        <div className="search-detail">
-          <div className="main-search-detail">
+        </Link>
+      </div>
+      <div className="search-detail">
+        <div className="main-search-detail">
+          <Link to={`/${isMovie}/detail/${id}`}>
             <h2>{title}</h2>
-            <span className="release-date">{realse_date}</span>
-          </div>
-          <div className="overview-data">
-            <p>{overview}</p>
-          </div>
+            <div />
+          </Link>
+          <span className="release-date">{realse_date}</span>
+        </div>
+        <div className="overview-data">
+          <p>{overview}</p>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

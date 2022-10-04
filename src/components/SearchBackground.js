@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./searchbackground.css";
 
 const SearchBackground = () => {
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleOnChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearch = () => {
+    navigate(`/search/movie?query=${searchQuery}`);
+  }
+
   return (
     <div className="container background">
       <section className="main-container">
@@ -14,13 +26,14 @@ const SearchBackground = () => {
           </div>
 
           <div className="search">
-            <form id="inner_search_form" action="/search/movie" method="get">
+            <form id="inner_search_form" onSubmit={handleSearch}>
               <input
-              
                 className="search_input "
                 name="query"
                 type="text"
                 placeholder="Search for a movie, tv show, person......"
+                onChange={handleOnChange}
+                value={searchQuery}
               />
               <input type="submit" value="Search" className="submit_input" />
             </form>

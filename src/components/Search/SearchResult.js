@@ -13,19 +13,16 @@ const SearchResult = () => {
   const [searchParams] = useSearchParams();
   const [inputBox, setInputBox] = useState("");
   const query = searchParams.get("query");
-
   const [movieData, setMovieData] = useState([]);
   const [tvData, setTvData] = useState([]);
   const [collectionData, setCollectionData] = useState([]);
   const [personData, setPersonData] = useState([]);
   const [keywordData, setKeywordData] = useState([]);
-
   const [companyData, setCompanyData] = useState([]);
-
   const [pageNumber, setPageNumber] = useState(0);
-
+console.info(tvData,'data')
   const params = useParams();
-
+// console.log(params,'params')
   useEffect(() => {
     GetSearchData("movie", query, 1).then((response) =>
       setMovieData(response.data)
@@ -95,7 +92,7 @@ const SearchResult = () => {
         );
     }
   };
-  console.log(keywordData, "keyword");
+  // console.log(keywordData, "keyword");
 
   const pageChangeHandler = ({ selected }) => {
     setPageNumber(selected);
@@ -258,10 +255,12 @@ const SearchResult = () => {
                 movieData.results.map((data) => (
                   <SearchCard
                     key={data.id}
+                    id= {data.id}
                     poster_path={data.poster_path}
                     title={data.title}
                     release_date={data.release_date}
                     overview={data.overview}
+                    isMovie='movie'
                   />
                 ))}
 
@@ -270,10 +269,12 @@ const SearchResult = () => {
                 tvData.results.map((currentSearchTvData) => (
                   <SearchCard
                     key={currentSearchTvData.id}
+                    id= {currentSearchTvData.id}
                     poster_path={currentSearchTvData.poster_path}
                     title={currentSearchTvData.name}
                     release_date={currentSearchTvData.first_air_date}
                     overview={currentSearchTvData.overview}
+                    isMovie='tv'
                   />
                 ))}
 
