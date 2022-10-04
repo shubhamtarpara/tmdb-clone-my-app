@@ -99,7 +99,7 @@ const Recommendations = ({ isMovie, id }) => {
                           title={recommendationMovie.title}
                           alt={recommendationMovie.title}
                         >
-                          <bdi>{recommendationMovie.title}</bdi>
+                          <bdi>{recommendationMovie.title || recommendationMovie.name}</bdi>
                         </Link>
                         <span className="vote_average">
                           {Math.floor(recommendationMovie.vote_average * 10)}%
