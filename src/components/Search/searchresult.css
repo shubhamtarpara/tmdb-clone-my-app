@@ -156,6 +156,10 @@
     border-top: 1px solid #ccc;
     text-transform: capitalize
 }
+
+.main-search-detail a:hover {
+    color:#000;
+}
 @media only screen and (max-width: 992px) {
     .search-main-section-wrapper {
         margin: 0 !important;
