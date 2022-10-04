@@ -35,3 +35,6 @@
 .new_button a {
     color: #000;
 }
+.new_button a:hover {
+    color:#000;
+}
