@@ -20,14 +20,14 @@ import SortSectionAccordian from "./SortSection";
 import FilterSectionAccordian from "./FilterSection";
 
 const CategoryPage = () => {
-  const { showType, categoryType } = useParams(); // Get params from url
+  const { showType, categoryType } = useParams(); 
   const [isLoadMore, setIsLoadMore] = useState(false);
-  // Default Parameters when categoryType changed
+
   const [defaultParams, setDefaultParams] = useState(
     getInitialParams(showType, categoryType)
   );
 
-  // Parameters when filter changes
+ 
   const [urlParams, setUrlParams] = useState(
     getInitialParams(showType, categoryType)
   );
@@ -37,7 +37,7 @@ const CategoryPage = () => {
     setDefaultParams(getInitialParams(showType, categoryType));
   }, [showType, categoryType]);
 
-  const [movies, setMovies] = useState(null); //Array of movies
+  const [movies, setMovies] = useState(null); 
 
   const generateUrl = useCallback(
     (params) => {
@@ -52,20 +52,20 @@ const CategoryPage = () => {
     [showType]
   );
 
-  // const [discoverUrl, setDiscoverUrl] = useState(generateUrl(urlParams));
+  const [discoverUrl, setDiscoverUrl] = useState(generateUrl(urlParams));
 
-  // useEffect(() => {
-  //   setDiscoverUrl(generateUrl(defaultParams));
-  // }, [defaultParams, generateUrl]);
+  useEffect(() => {
+    setDiscoverUrl(generateUrl(defaultParams));
+  }, [defaultParams, generateUrl]);
 
-  //Fetch movies based on type
-  const [loading, setLoading] = useState(true); //Loading
-  const [error, setError] = useState(null); //Error handling
 
-  const [hasMore, setHasMore] = useState(false); //Infinite scroll
-  const [totalPages, setTotalPages] = useState(null); //total pages of movies
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [dropdownTitle, setDropdownTitle] = useState("Popularity Descending"); //Dropdown title
+  const [hasMore, setHasMore] = useState(false); 
+  const [totalPages, setTotalPages] = useState(null); 
+
+  const [dropdownTitle, setDropdownTitle] = useState("Popularity Descending"); 
 
   useEffect(() => {
     switch (urlParams.sort_by) {
@@ -99,24 +99,24 @@ const CategoryPage = () => {
     }
   }, [urlParams.sort_by]);
 
-  const [genresList, setGenresList] = useState(null); //Filter list
-  const [activeGenresArray, setActiveGenresArray] = useState([]); //Array of filters
+  const [genresList, setGenresList] = useState(null); 
+  const [activeGenresArray, setActiveGenresArray] = useState([]); 
 
-  const [CertificationList, setCertificationList] = useState(null); //Certification list
+  const [CertificationList, setCertificationList] = useState(null); 
   const [activeCertificationsArray, setActiveCertificationsArray] = useState(
     []
-  ); //Array of certifications
+  ); 
 
-  const [countriesList, setCountriesList] = useState(null); //Countries list
+  const [countriesList, setCountriesList] = useState(null); 
 
-  const [ottRegionsList, setOttRegionsList] = useState(null); //OTT Regions list
-  const [activeOttRegion, setActiveOttRegion] = useState(null); //Active OTT Region
-  const [ottProvidersList, setOttProvidersList] = useState(null); //OTT Providers list
-  const [activeOttProviders, setActiveOttProviders] = useState([]); //Array of active OTT Providers
+  const [ottRegionsList, setOttRegionsList] = useState(null); 
+  const [activeOttRegion, setActiveOttRegion] = useState(null); 
+  const [ottProvidersList, setOttProvidersList] = useState(null); 
+  const [activeOttProviders, setActiveOttProviders] = useState([]); 
 
-  const [progress, setProgress] = useState(10); //Progress bar
+  const [progress, setProgress] = useState(10); 
 
-  const [isAllAvailabilities, setIsAllAvailabilities] = useState(true); //All available
+  const [isAllAvailabilities, setIsAllAvailabilities] = useState(true);
 
   const toggleAllAvailabilities = () => {
     setIsAllAvailabilities(!isAllAvailabilities);
@@ -186,7 +186,7 @@ const CategoryPage = () => {
       setHasMore(false);
       setTotalPages(null);
 
-      fetch( generateUrl(urlParams, showType))
+      fetch(discoverUrl)
         .then((response) => response.json())
         .then((data) => {
           setMovies(data.results);
@@ -199,7 +199,7 @@ const CategoryPage = () => {
           setLoading(false);
         });
     }
-  }, [showType, categoryType, urlParams]);
+  }, [showType, categoryType, discoverUrl]);
 
   useEffect(() => {
     const fetchFilter = async () => {
@@ -347,10 +347,47 @@ const CategoryPage = () => {
     });
   }, [activeGenresArray]);
 
+  useEffect(() => {
+    setUrlParams({
+      ...urlParams,
+      with_release_type:
+        activeReleaseTypesArray.length > 0 &&
+        activeReleaseTypesArray.join("%7C"),
+    });
+  }, [activeReleaseTypesArray]);
+
+  const fetchMoreMovies = (page) => {
+    setLoading(true);
+    setError(null);
+
+    // console.log(urlParams.page, "page");
+    // setDiscoverUrl(generateUrl(urlParams));
+
+    fetch(generateUrl(urlParams))
+      .then((response) => response.json())
+      .then((data) => {
+        if (urlParams.page === 1) {
+          setMovies(data.results);
+        }
+        else{
+          setMovies([...movies, ...data.results]);
+        }
+        // setTotalPages(data.total_pages);
+        // setHasMore(data.total_pages > urlParams.page);
+        setLoading(false);
+        setProgress(100);
+      })
+
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
+  }; //Fetch more movies
+
   const handleSearch = () => {
     setIsLoadMore(false);
     const url = generateUrl(urlParams, showType);
-    // setDiscoverUrl(url);
+    setDiscoverUrl(url);
   };
 
   const toggleFilter = (filter) => {
@@ -383,41 +420,18 @@ const CategoryPage = () => {
       setActiveOttProviders([...activeOttProviders, providerId]);
     }
   };
-  useEffect(() => {
-    setUrlParams({
-      ...urlParams,
-      with_release_type:
-        activeReleaseTypesArray.length > 0 &&
-        activeReleaseTypesArray.join("%7C"),
-    });
-  }, [activeReleaseTypesArray]);
 
-  const fetchMoreMovies = () => {
-    setLoading(true);
-    setError(null);
+  // function to get nearest next value which is multiple of 4
+  // eg. if value is 5, it will return 8
 
-    // console.log(urlParams.page, "page");
-    // setDiscoverUrl();
+  const getNearestNextMultipleOfFour = (value) => {
+    let nearestNextMultipleOfFour = value;
+    if (value % 4 !== 0) {
+      nearestNextMultipleOfFour = value + ((4 - (value % 4)) % 4); // if value is 5, it will return 8
+    }
+    return nearestNextMultipleOfFour;
+  };
 
-    // debugger;
-    fetch(generateUrl(urlParams))
-      .then((response) => response.json())
-      .then((data) => {
-        if (urlParams.page === 1) {
-          setMovies(data.results);
-        } else {
-          setMovies([...movies, ...data.results]);
-        }
-        // setTotalPages(data.total_pages);
-        // setHasMore(data.total_pages > urlParams.page);
-        setLoading(false);
-        setProgress(100);
-      })
-      .catch((error) => {
-        setError(error);
-        setLoading(false);
-      });
-  }; //Fetch more movies
   return (
     <>
       <section className="content container">
@@ -495,6 +509,23 @@ const CategoryPage = () => {
                                   id="dropdown-basic"
                                 >
                                   <span>
+                                    {urlParams.ott_region && (
+                                      <img
+                                        // src={`https://flagcdn.com/w20/${urlParams.ott_region.toLowerCase()}.png`}
+                                        src={`https://raw.githubusercontent.com/SujalShah3234/All-Country-Flags/master/${urlParams.ott_region}.png`}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src =
+                                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8wkWFOYkdG7W9Xf0-aheuTMQHTEsySnpXOQ&usqp=CAU";
+                                        }}
+                                        style={{
+                                          width: "24px",
+                                          height: "20px",
+                                          marginRight: "10px",
+                                        }}
+                                        alt={urlParams.ott_region}
+                                      />
+                                    )}
                                     {urlParams.ott_region
                                       ? ottRegionsList.find(
                                           (country) =>
@@ -599,7 +630,6 @@ const CategoryPage = () => {
                         {movies && (
                           <InfiniteScroll
                             dataLength={movies.length}
-
                             next={() => {
                               setProgress(50);
                               console.log(urlParams.page, "page-auto");

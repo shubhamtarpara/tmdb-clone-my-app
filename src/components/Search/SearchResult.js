@@ -4,6 +4,8 @@ import { useSearchParams, Link, useParams } from "react-router-dom";
 import { GetSearchData } from "../../api";
 import SearchCard from "./SearchCard";
 import SearchPeopleCard from "./SearchPeopleCard";
+import SearchKeywordCard from "./SearchKeywordCard";
+import SearchCompanyCard from "./SearchCompanyCard";
 import "./searchresult.css";
 // import SearchPeopleCard from "./SearchPeopleCard";
 
@@ -11,10 +13,15 @@ const SearchResult = () => {
   const [searchParams] = useSearchParams();
   const [inputBox, setInputBox] = useState("");
   const query = searchParams.get("query");
+
   const [movieData, setMovieData] = useState([]);
   const [tvData, setTvData] = useState([]);
   const [collectionData, setCollectionData] = useState([]);
   const [personData, setPersonData] = useState([]);
+  const [keywordData, setKeywordData] = useState([]);
+
+  const [companyData, setCompanyData] = useState([]);
+
   const [pageNumber, setPageNumber] = useState(0);
 
   const params = useParams();
@@ -32,6 +39,14 @@ const SearchResult = () => {
     GetSearchData("person", query, 1).then((response) =>
       setPersonData(response.data)
     );
+
+    GetSearchData("keyword", query, 1).then((response) => {
+      setKeywordData(response.data);
+    });
+
+    GetSearchData("company", query, 1).then((response) => {
+      setCompanyData(response.data);
+    });
   }, [query]);
 
   useEffect(() => {
@@ -64,12 +79,23 @@ const SearchResult = () => {
           setPersonData(response.data)
         );
         break;
+      case "keyword":
+        GetSearchData("keyword", query, selected + 1).then((response) => {
+          setKeywordData(response.data);
+        });
+        break;
+      case "company":
+        GetSearchData("company", query, selected + 1).then((response) => {
+          setCompanyData(response.data);
+        });
+        break;
       default:
         GetSearchData("movie", query, selected + 1).then((response) =>
           setMovieData(response.data)
         );
     }
   };
+  console.log(keywordData, "keyword");
 
   const pageChangeHandler = ({ selected }) => {
     setPageNumber(selected);
@@ -79,7 +105,13 @@ const SearchResult = () => {
   const pageCount =
     params.currentData === "movie"
       ? movieData.total_pages
-      : params.currentData === "tv";
+      : params.currentData === "tv"
+      ? tvData.total_pages
+      : params.currentData === "person"
+      ? personData.total_pages
+      : params.currentData === "keyword"
+      ? keywordData.total_pages
+      : companyData.total_pages;
 
   const inputHandler = (e) => {
     setInputBox(e.target.value);
@@ -181,6 +213,39 @@ const SearchResult = () => {
                   </Link>
                   <span>{personData.total_results}</span>
                 </li>
+
+                <li
+                  className={
+                    "" + (params.currentData === "keyword" ? "selected" : "")
+                  }
+                >
+                  <Link
+                    id="person"
+                    to={`/search/keyword?query=${query}`}
+                    className="search_tab "
+                    title="People"
+                    alt="People"
+                  >
+                    keyword
+                  </Link>
+                  <span>{keywordData.total_results}</span>
+                </li>
+                <li
+                  className={
+                    "" + (params.currentData === "company" ? "selected" : "")
+                  }
+                >
+                  <Link
+                    id="person"
+                    to={`/search/company?query=${query}`}
+                    className="search_tab "
+                    title="People"
+                    alt="People"
+                  >
+                    Company
+                  </Link>
+                  <span>{companyData.total_results}</span>
+                </li>
               </ul>
             </div>
           </div>
@@ -214,17 +279,15 @@ const SearchResult = () => {
 
               {params.currentData === "collection" &&
                 collectionData.results &&
-                collectionData.results.map(
-                  (currentSearchCollectionData) => (
-                    <SearchCard
-                      key={currentSearchCollectionData.id}
-                      poster_path={currentSearchCollectionData.poster_path}
-                      title={currentSearchCollectionData.name}
-                      release_date=""
-                      overview={currentSearchCollectionData.overview}
-                    />
-                  )
-                )}
+                collectionData.results.map((currentSearchCollectionData) => (
+                  <SearchCard
+                    key={currentSearchCollectionData.id}
+                    poster_path={currentSearchCollectionData.poster_path}
+                    title={currentSearchCollectionData.name}
+                    release_date=""
+                    overview={currentSearchCollectionData.overview}
+                  />
+                ))}
 
               {params.currentData === "people" &&
                 personData.results &&
@@ -235,6 +298,24 @@ const SearchResult = () => {
                     name={currentSearchPeopleData.name}
                     department={currentSearchPeopleData.known_for_department}
                     known_for_array={currentSearchPeopleData.known_for}
+                  />
+                ))}
+
+              {params.currentData === "keyword" &&
+                keywordData.results &&
+                keywordData.results.map((currentKeywordData) => (
+                  <SearchKeywordCard
+                    key={currentKeywordData.id}
+                    name={currentKeywordData.name}
+                  />
+                ))}
+              {params.currentData === "company" &&
+                companyData.results &&
+                companyData.results.map((currentCompanyData) => (
+                  <SearchCompanyCard
+                    key={currentCompanyData.id}
+                    name={currentCompanyData.name}
+                    logo_path={currentCompanyData.logo_path}
                   />
                 ))}
             </div>
@@ -259,6 +340,10 @@ const SearchResult = () => {
                       ? tvData.total_pages
                       : params.currentData === "collection"
                       ? collectionData.total_pages
+                      : params.currentData === "keyword"
+                      ? keywordData.total_pages
+                      : params.currentData === "company"
+                      ? companyData.total_pages
                       : personData.total_pages
                   }
                   onPageChange={pageChangeHandler}
